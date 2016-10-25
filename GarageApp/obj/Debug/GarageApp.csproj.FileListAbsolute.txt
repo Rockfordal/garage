@@ -1,0 +1,6 @@
+C:\Users\elev\Source\Repos\GarageApp\GarageApp\bin\Debug\GarageApp.exe.config
+C:\Users\elev\Source\Repos\GarageApp\GarageApp\bin\Debug\GarageApp.exe
+C:\Users\elev\Source\Repos\GarageApp\GarageApp\bin\Debug\GarageApp.pdb
+C:\Users\elev\Source\Repos\GarageApp\GarageApp\obj\Debug\GarageApp.csprojResolveAssemblyReference.cache
+C:\Users\elev\Source\Repos\GarageApp\GarageApp\obj\Debug\GarageApp.exe
+C:\Users\elev\Source\Repos\GarageApp\GarageApp\obj\Debug\GarageApp.pdb
