@@ -14,15 +14,23 @@ namespace GarageApp
             StartOfWorld();
         }
 
-        public Garage garage { get; set; }
-        public Garage parkinglot { get; set; }
+        public Garage<Vehicle> garage { get; set; }
+        public Garage<Vehicle> parkinglot { get; set; }
 
         public void StartOfWorld()
         {
-            garage = new Garage{ name = "Grand Garage"};
-            garage.vehicles.Add(new Car { name = "Audi R8", color = "black", weight = 850 });
-            garage.vehicles.Add(new Motorcycle() { name = "Honda", color = "red", weight = 150 });
-            garage.vehicles.Add(new OneWheeler() { name = "Wheel", color = "yellow", weight = 4 });
+            garage = new Garage<Vehicle>
+            {
+                name = "Grand Garage",
+                vehicles = new List<Vehicle>
+                {
+                    new Car(1, "Ford Escort", "vit", 825),
+                    new Car(2, "Audi R8", "black", 790),
+                    new Motorcycle(3, "Honda", "red", 150),
+                    new OneWheeler(4, "Wheely", "yellow", 4)
+                }
+            };
+
         }
     }
 }

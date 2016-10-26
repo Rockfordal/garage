@@ -11,12 +11,13 @@ namespace GarageApp
         public static void PutLabel(string label)
         {
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(label);
             for (int i = 0; i < label.Length; i++)
             {
                 Console.Write("-");
             }
-            Console.WriteLine();
+            Console.WriteLine("\n");
         }
 
         /// <summary>

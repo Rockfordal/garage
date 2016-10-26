@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GarageApp
+﻿namespace GarageApp
 {
     class Motorcycle : Vehicle
     {
+        public Motorcycle(int id, string name, string color, int weight) : base(id, name, color, weight)
+        {
+        }
     }
 }
