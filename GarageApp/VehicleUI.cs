@@ -9,24 +9,21 @@ namespace GarageApp
 
         internal static void DeleteVehicle(int id, GarageHandler gh, MenuHandler mh)
         {
-            int beforeC = gh.garage.vehicles.Count();
+            int beforeC = gh.GetCurrentGarage().vehicles.Count();
             Vehicle vehicle = (Vehicle) gh.TryDeleteVehicle(id);
-            int afterC = gh.garage.vehicles.Count();
+            int afterC = gh.GetCurrentGarage().vehicles.Count();
 
             if (vehicle != null && afterC == beforeC - 1)
             {
-                //ConsoleHelper.PutLabel("Resultat:");
-                //Console.WriteLine("Fordonet har raderats" + beforeC  + " " + afterC);
-                UpdateVehicleMenu(mh, gh);
+                //ConsoleHelper.Announce("Resultat", "Fordonet har raderats" + beforeC  + " " + afterC);
+                Common.UpdateVehicleMenu(gh, mh);
                 mh.GoBack();
             }
             else
             {
-                Console.WriteLine("Tyvärr, Fordonet kunde inte hittas");
-                Console.ReadKey();
+                ConsoleHelper.Announce("Tyvärr, Fordonet kunde inte hittas");
             }
         }
-
 
         internal static void EditVehicle(int id, GarageHandler gh, MenuHandler mh)
         {
@@ -76,19 +73,45 @@ namespace GarageApp
             if (vehicle != null)
             {
                 ConsoleHelper.PutLabel("Fordonsinfo");
-                Console.WriteLine("Id:   " + vehicle.id);
-                Console.WriteLine("Namn: " + vehicle.name);
-                Console.WriteLine("Vikt: " + vehicle.weight);
-                Console.WriteLine("Färg: " + vehicle.color);
+                Console.WriteLine("Id:    " + vehicle.id);
+                Console.WriteLine("Namn:  " + vehicle.name);
+                Console.WriteLine("Vikt:  " + vehicle.weight);
+                Console.WriteLine("Färg:  " + vehicle.color);
+                Console.WriteLine("Regnr: " + vehicle.regnr);
                 Console.ReadKey();
             }
         }
 
-        private static void UpdateVehicleMenu(MenuHandler mh, GarageHandler gh)
+        internal static void AddVehicle(GarageHandler gh, MenuHandler mh)
         {
-            mh.menus.Remove("vehicleIndex");
-            mh.AddMenu(new Menu("vehicleIndex", "Välj fordon", Common.VehiclesToMenuItems(gh.garage.vehicles)));
+            Vehicle vehicle;
+            ConsoleHelper.PutLabel("Lägg till fordon");
+            var typ    = ConsoleHelper.AskQuestionText("Car/Motorcycle/OneWheeler/Airplane?").ToLower();
+            var name   = ConsoleHelper.AskQuestionText("Namn");
+            var color  = ConsoleHelper.AskQuestionText("Färg");
+            var regnr  = ConsoleHelper.AskQuestionText("Regnr");
+            var weight = ConsoleHelper.AskQuestionInt("Vikt");
+
+            if (typ == "motorcycle")
+                vehicle = new Motorcycle(100, name, color, regnr, weight);
+            else if (typ == "onewheeler")
+                vehicle = new OneWheeler(101, name, color, regnr, weight);
+            else if (typ == "airplane")
+                vehicle = new Airplane(101, name, color, regnr, weight);
+            else
+                vehicle = new Vehicle(102, name, color, regnr, weight);
+
+            gh.AddVehicle(vehicle);
+            Common.UpdateVehicleMenu(gh, mh);
         }
 
+        internal static void SearchByRegnr(GarageHandler gh, MenuHandler mh)
+        {
+            ConsoleHelper.PutLabel("Registernummersökning");
+            var regnr = ConsoleHelper.AskQuestionText("Ange regnr");
+            Vehicle found = gh.FindVehicleByRegnr(regnr);
+            if (found != null)
+                VehicleUI.ShowVehicleInfo(found.id, gh);
+        }
     }
 }

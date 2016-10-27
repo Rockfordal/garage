@@ -8,16 +8,19 @@ namespace GarageApp
 {
     class Vehicle
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string color { get; set; }
-        public int weight { get; set; }
+        public int    id         { get; set; }
+        public string name       { get; set; }
+        public string regnr      { get; set; }
+        public int    wheelCount { get; set; }
+        public string color      { get; set; }
+        public int    weight     { get; set; }
 
-        public Vehicle(int id, string name, string color, int weight)
+        public Vehicle(int id, string name, string color, string regnr, int weight)
         {
-            this.id = id;
-            this.name = name;
-            this.color = color;
+            this.id     = id;
+            this.name   = name;
+            this.color  = color;
+            this.regnr  = regnr;
             this.weight = weight;
         }
 

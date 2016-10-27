@@ -2,7 +2,7 @@
 {
     class OneWheeler : Vehicle
     {
-        public OneWheeler(int id, string name, string color, int weight) : base(id, name, color, weight)
+        public OneWheeler(int id, string name, string color, string regnr, int weight) : base(id, name, color, regnr, weight)
         {
         }
     }

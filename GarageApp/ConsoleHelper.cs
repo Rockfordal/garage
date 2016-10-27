@@ -37,6 +37,16 @@ namespace GarageApp
             return Console.ReadLine();
         }
 
+        public static int AskQuestionInt(string question)
+        {
+            int num;
+            Console.Write(question + ": ");
+            string s = Console.ReadLine();
+            int.TryParse(s, out num);
+            return num;
+        }
+
+
         public static void AnyKey()
         {
             Console.WriteLine("Tryck valfri tangent för att fortsätta");
@@ -113,5 +123,24 @@ namespace GarageApp
             Console.Write(menu.menuItems.ElementAt(index));
         }
 
+
+        internal static void Announce(string text)
+        {
+            var oldFg = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(text);
+            Console.ForegroundColor = oldFg;
+            ConsoleHelper.Pause();
+        }
+
+        internal static void Announce(string label,string text)
+        {
+            var oldFg = Console.ForegroundColor;
+            ConsoleHelper.PutLabel(label);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(text);
+            Console.ForegroundColor = oldFg;
+            ConsoleHelper.Pause();
+        }
     }
 }

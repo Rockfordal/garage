@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GarageApp
 {
     class Garage<T> where T : Vehicle
     {
-        public string name { get; set; }
+        public int id                  { get; set; }
+        public string name             { get; set; }
         public IEnumerable<T> vehicles { get; set; }
 
         public Garage()
@@ -17,5 +15,9 @@ namespace GarageApp
             vehicles = new List<T>();
         }
 
+        public override string ToString()
+        {
+            return String.Format("{1}", id, name);
+        }
     }
 }

@@ -56,6 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Airplane.cs" />
+    <Compile Include="Boat.cs" />
+    <Compile Include="Buss.cs" />
     <Compile Include="Car.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="ConsoleHelper.cs" />

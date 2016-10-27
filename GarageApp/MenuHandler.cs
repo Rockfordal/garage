@@ -54,7 +54,7 @@ namespace GarageApp
             return currentMenu.name;
         }
 
-        internal void trySetMenu(string name)
+        internal void TryGotoMenu(string name)
         {
             bool exists = menus.ContainsKey(name);
 
