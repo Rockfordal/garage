@@ -32,5 +32,29 @@ namespace GarageApp
             };
 
         }
+
+        internal object TryGetVehicle(int id)
+        {
+            Vehicle found = null;
+            IEnumerable<Vehicle> vehicles = this.garage.vehicles
+                .Where(v => v.id == id)
+                .Select(b => b);
+            if (vehicles.Count() > 0)
+                found = vehicles.First();
+            return found;
+        }
+
+        internal Vehicle TryDeleteVehicle(int id)
+        {
+            Vehicle vehicle = (Vehicle) TryGetVehicle(id);
+            if (vehicle != null)
+            {
+                this.garage.vehicles =
+                    this.garage.vehicles
+                        .Where(v => v.id != id)
+                        .Select(b => b);
+            }
+            return vehicle;
+        }
     }
 }

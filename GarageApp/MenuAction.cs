@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32.SafeHandles;
 
 namespace GarageApp
 {
@@ -11,8 +7,6 @@ namespace GarageApp
         public int id                 { get; set; }
         public Common.ActionType type { get; set; }
         public string data            { get; set; }
-        public MenuItem fromMenuItem  { get; set; }
-        //public string fromMenu        { get; set; }
 
         public MenuAction(Common.ActionType type, string data, int id)
         {
@@ -30,6 +24,10 @@ namespace GarageApp
         public MenuAction(Common.ActionType type) : this(type, "")
         {
         }
-    }
 
+        public MenuAction() : this(Common.ActionType.noop)
+        {
+        }
+
+    }
 }
