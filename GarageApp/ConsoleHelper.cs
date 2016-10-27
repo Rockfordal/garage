@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GarageApp
@@ -8,7 +7,7 @@ namespace GarageApp
     {
         private static ConsoleKey Q             = ConsoleKey.Q;
         private static ConsoleKey Escape        = ConsoleKey.Escape;
-        private static Common.ActionType back   = Common.ActionType.back;
+        private static MenuBuilder.ActionType back   = MenuBuilder.ActionType.back;
 
         /// <summary>
         /// Clears the screen, Shows menulabel and generates underline
@@ -17,13 +16,20 @@ namespace GarageApp
         public static void PutLabel(string label)
         {
             Console.Clear();
+            var oldFg = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(label);
-            for (int i = 0; i < label.Length; i++)
-            {
+            PutLine(label.Length + 4);
+            Console.WriteLine("| " + label + " |");
+            PutLine(label.Length + 4);
+            Console.ForegroundColor = oldFg;
+            Console.WriteLine();
+        }
+
+        public static void PutLine(int n)
+        {
+            for (int i = 0; i < n; i++)
                 Console.Write("-");
-            }
-            Console.WriteLine("\n");
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -75,7 +81,8 @@ namespace GarageApp
             int indexMax = menu.menuItems.Count() - 1;
             Console.CursorTop = lowest;
 
-            WriteActive(menu, index); // Aktivera första valet
+            if (menu.menuItems.Count() > 0)
+                WriteActive(menu, index); // Aktivera första valet
 
             do
             {
@@ -123,6 +130,13 @@ namespace GarageApp
             Console.Write(menu.menuItems.ElementAt(index));
         }
 
+        internal static string GetTypeOf(Vehicle v)
+        {
+            if (v != null)
+                return v.GetType().ToString().Split('.').LastOrDefault();
+            else
+                return null;
+        }
 
         internal static void Announce(string text)
         {
@@ -142,5 +156,15 @@ namespace GarageApp
             Console.ForegroundColor = oldFg;
             ConsoleHelper.Pause();
         }
+
+        internal static void Announce(int num)
+        {
+            var oldFg = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(num.ToString());
+            Console.ForegroundColor = oldFg;
+            ConsoleHelper.Pause();
+        }
+
     }
 }

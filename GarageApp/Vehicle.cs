@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GarageApp
 {
@@ -15,6 +12,11 @@ namespace GarageApp
         public string color      { get; set; }
         public int    weight     { get; set; }
 
+        public string MyType
+        {
+            get { return ConsoleHelper.GetTypeOf(this); }
+        }
+
         public Vehicle(int id, string name, string color, string regnr, int weight)
         {
             this.id     = id;
@@ -26,7 +28,30 @@ namespace GarageApp
 
         public override string ToString()
         {
-            return String.Format("{0} {1}  ({2} kg)", color, name, weight);
+            string colorF  = SafeSub(color, 7);
+            string nameF   = SafeSub(name, 20);
+            string weightF = SafeSub(weight, 4);
+            return String.Format("{0, 7} {1, 20} {2, 4}kg", colorF , nameF, weightF);
         }
+
+        public static string SafeSub(string field, int num)
+        {
+            if (field != null)
+            {
+                int cap = field.Count();
+                int cut = Math.Min(cap, num);
+                return field.Substring(0, cut);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public static string SafeSub(int field, int num)
+        {
+            return SafeSub(field.ToString(), num);
+        }
+
     }
 }

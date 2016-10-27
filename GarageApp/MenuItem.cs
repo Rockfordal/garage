@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GarageApp
+﻿namespace GarageApp
 {
     class MenuItem
     {
@@ -12,7 +6,7 @@ namespace GarageApp
         public string label { get; set; }
         public MenuAction action { get; set; }
 
-        public MenuItem(string label) : this(label, new MenuAction(Common.ActionType.noop, ""))
+        public MenuItem(string label) : this(label, new MenuAction(MenuBuilder.ActionType.noop, ""))
         {
         }
 

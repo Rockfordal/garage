@@ -16,7 +16,7 @@ namespace GarageApp
             if (vehicle != null && afterC == beforeC - 1)
             {
                 //ConsoleHelper.Announce("Resultat", "Fordonet har raderats" + beforeC  + " " + afterC);
-                Common.UpdateVehicleMenu(gh, mh);
+                MenuBuilder.UpdateVehicleMenu(gh, mh);
                 mh.GoBack();
             }
             else
@@ -35,9 +35,9 @@ namespace GarageApp
                 do
                 {
                     Menu editMenu = new Menu("vehicleEdit", "Redigerar fordon", new List<MenuItem> {
-                                        new MenuItem("Namn: " + vehicle.name,   new MenuAction(Common.ActionType.noop, "namn")),
-                                        new MenuItem("Färg: " + vehicle.color,  new MenuAction(Common.ActionType.noop, "color")),
-                                        new MenuItem("Vikt: " + vehicle.weight, new MenuAction(Common.ActionType.noop, "weight")) });
+                                        new MenuItem("Namn: " + vehicle.name,   new MenuAction(MenuBuilder.ActionType.noop, "namn")),
+                                        new MenuItem("Färg: " + vehicle.color,  new MenuAction(MenuBuilder.ActionType.noop, "color")),
+                                        new MenuItem("Vikt: " + vehicle.weight, new MenuAction(MenuBuilder.ActionType.noop, "weight")) });
                     action = ConsoleHelper.RenderMenu(editMenu);
 
                     Console.ForegroundColor = ConsoleColor.Cyan;
@@ -62,7 +62,7 @@ namespace GarageApp
                 //Console.WriteLine("type(" + action.type + ") (" + action.data + ") "+ action.id);
                 ConsoleHelper.Pause();
 
-                } while (action.type != Common.ActionType.back);
+                } while (action.type != MenuBuilder.ActionType.back);
             }
         }
 
@@ -73,11 +73,12 @@ namespace GarageApp
             if (vehicle != null)
             {
                 ConsoleHelper.PutLabel("Fordonsinfo");
-                Console.WriteLine("Id:    " + vehicle.id);
-                Console.WriteLine("Namn:  " + vehicle.name);
-                Console.WriteLine("Vikt:  " + vehicle.weight);
-                Console.WriteLine("Färg:  " + vehicle.color);
-                Console.WriteLine("Regnr: " + vehicle.regnr);
+                Console.WriteLine("{0,14} {1}", "Id:", vehicle.id);
+                Console.WriteLine("{0,14} {1}", "Namn:", vehicle.name);
+                Console.WriteLine("{0,14} {1} kg", "Vikt:", vehicle.weight);
+                Console.WriteLine("{0,14} {1}", "Färg:", vehicle.color);
+                Console.WriteLine("{0,14} {1}", "Regnr:", vehicle.regnr);
+                Console.WriteLine("{0,14} {1}", "Fordonstyp:", vehicle.MyType);
                 Console.ReadKey();
             }
         }
@@ -102,7 +103,7 @@ namespace GarageApp
                 vehicle = new Vehicle(102, name, color, regnr, weight);
 
             gh.AddVehicle(vehicle);
-            Common.UpdateVehicleMenu(gh, mh);
+            MenuBuilder.UpdateVehicleMenu(gh, mh);
         }
 
         internal static void SearchByRegnr(GarageHandler gh, MenuHandler mh)
@@ -112,6 +113,9 @@ namespace GarageApp
             Vehicle found = gh.FindVehicleByRegnr(regnr);
             if (found != null)
                 VehicleUI.ShowVehicleInfo(found.id, gh);
+            else
+                ConsoleHelper.Announce("Ursäkta, fordonet kunde tyvärr inte hittas.");
+            //    SearchByRegnr(gh, mh);
         }
     }
 }

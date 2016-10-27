@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GarageApp
 {
@@ -11,6 +7,7 @@ namespace GarageApp
         public SortedDictionary<string, Menu> menus { get; set; }
         public Stack<string> current { get; set; }
         public string lastMenu { get; set; }
+        public MenuSettings settings { get; set; }
 
         public Menu currentMenu
         {

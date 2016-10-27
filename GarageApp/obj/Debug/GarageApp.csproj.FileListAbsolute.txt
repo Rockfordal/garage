@@ -4,3 +4,11 @@ C:\Users\elev\Source\Repos\GarageApp\GarageApp\bin\Debug\GarageApp.pdb
 C:\Users\elev\Source\Repos\GarageApp\GarageApp\obj\Debug\GarageApp.csprojResolveAssemblyReference.cache
 C:\Users\elev\Source\Repos\GarageApp\GarageApp\obj\Debug\GarageApp.exe
 C:\Users\elev\Source\Repos\GarageApp\GarageApp\obj\Debug\GarageApp.pdb
+E:\garage\GarageApp\bin\Debug\GarageApp.exe.config
+E:\garage\GarageApp\obj\Debug\GarageApp.exe
+E:\garage\GarageApp\obj\Debug\GarageApp.pdb
+E:\garage\GarageApp\bin\Debug\GarageApp.exe
+E:\garage\GarageApp\bin\Debug\GarageApp.pdb
+E:\garage\GarageApp\obj\Debug\GarageApp.csprojResolveAssemblyReference.cache
+E:\garage\GarageApp\bin\Debug\Newtonsoft.Json.dll
+E:\garage\GarageApp\bin\Debug\Newtonsoft.Json.xml

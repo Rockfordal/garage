@@ -2,13 +2,13 @@
 
 namespace GarageApp
 {
-    class Settings
+    class MenuSettings
     {
         public ConsoleColor BackgroundColor { get; set; }
         public ConsoleColor ActiveColor     { get; set; }
         public ConsoleColor PassiveColor    { get; set; }
 
-        public Settings()
+        public MenuSettings()
         {
             BackgroundColor = ConsoleColor.Black;
             PassiveColor    = ConsoleColor.DarkGray;

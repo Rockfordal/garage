@@ -8,13 +8,13 @@ namespace GarageApp
         public string name { get; set; }
         public string label { get; set; }
         public IEnumerable<MenuItem> menuItems { get; set; }
-        public Settings settings { get; set; }
+        public MenuSettings settings { get; set; }
 
         public Menu(string name, string label, IEnumerable<MenuItem> newItems)
         {
             this.name = name;
             this.label = label;
-            this.settings = new Settings();
+            this.settings = new MenuSettings();
             this.menuItems = newItems;
         }
 
