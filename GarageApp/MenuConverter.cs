@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using static GarageApp.MenuBuilder;
+// using static GarageApp.MenuBuilder;  // Kräver C# 6
 
 namespace GarageApp
 {
@@ -21,7 +21,8 @@ namespace GarageApp
         internal static MenuItem VehicleToMenuItem(Vehicle vehicle)
         {
             return new MenuItem(vehicle.ToString(),
-                    new MenuAction(ActionType.route, "vehicleOptions"), vehicle.id);
+                    //new MenuAction(MenuBuilder.ActionType.Route, "vehicleOptions"), vehicle.id);
+                    new MenuAction(MenuBuilder.ActionType.Edit, "vehicle"), vehicle.id);
         }
 
 
@@ -44,7 +45,7 @@ namespace GarageApp
 
         internal static MenuItem FieldToMenuItem(string field)
         {
-            return new MenuItem(field, new MenuAction(ActionType.route, "fieldEdit"));
+            return new MenuItem(field, new MenuAction(MenuBuilder.ActionType.Route, "fieldEdit"));
         }
 
 
@@ -62,16 +63,17 @@ namespace GarageApp
 
         internal static MenuItem GarageToMenuItem(Garage<Vehicle> garage)
         {
-            return new MenuItem(garage.ToString(), new MenuAction(MenuBuilder.ActionType.route, "garageOptions"), garage.id);
+            return new MenuItem(garage.ToString(), new MenuAction(MenuBuilder.ActionType.Route, "garageOptions"), garage.id);
         }
 
 
         internal static IEnumerable<MenuItem> VehiclesToMenuItemsByGroup(IEnumerable<Vehicle> vehicles)
         {
             List<MenuItem> menuItems = new List<MenuItem>();
-            Vehicle found = vehicles.FirstOrDefault();
-            string typ = ConsoleHelper.GetTypeOf(found);
-            IEnumerable<IGrouping<string, Vehicle>> query = vehicles.GroupBy(v => ConsoleHelper.GetTypeOf(v));
+            var enumerable = vehicles as IList<Vehicle> ?? vehicles.ToList();
+            //Vehicle found = enumerable.FirstOrDefault();
+            //string typ = ConsoleHelper.GetTypeOf(found);
+            IEnumerable<IGrouping<string, Vehicle>> query = enumerable.GroupBy(ConsoleHelper.GetTypeOf);
 
             foreach (var entry in query)
             {
@@ -90,7 +92,7 @@ namespace GarageApp
             string name = entry.Key;
             int count = entry.ToList().Count;
             string label = string.Format("{0,10} ({1})", name, count);
-            return new MenuItem(label, new MenuAction(MenuBuilder.ActionType.route, "groupOptions"));
+            return new MenuItem(label, new MenuAction(MenuBuilder.ActionType.Route, "groupOptions"));
         }
     }
 }

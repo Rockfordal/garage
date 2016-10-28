@@ -4,7 +4,7 @@ namespace GarageApp
 {
     class Program
     {
-        private static MenuBuilder.ActionType quit   = MenuBuilder.ActionType.quit;
+        private static MenuBuilder.ActionType quit   = MenuBuilder.ActionType.Quit;
 
         static void Main(string[] args)
         {
@@ -20,36 +20,53 @@ namespace GarageApp
             {
                 switch (action.type)
                 {
-                    //case MenuBuilder.ActionType.info:
-                    //    VehicleUI.ShowVehicleInfo(lastSelectedVehicle, gh);
-                    //    break;
-
-                    case MenuBuilder.ActionType.edit:
-                        VehicleUI.EditVehicle(lastSelectedVehicle, gh, mh);
-                        break;
-
-                    case MenuBuilder.ActionType.delete:
-                        VehicleUI.DeleteVehicle(lastSelectedVehicle, gh, mh);
-                        break;
-
-                    case MenuBuilder.ActionType.route:
+                        
+                    case MenuBuilder.ActionType.Edit:
                         switch (action.data)
                         {
-                            case "vehicleAdd":
-                                VehicleUI.AddVehicle(gh, mh);
-                                MenuBuilder.UpdateGroupMenu(gh, mh);
+                            case "garage":
+                                VehicleUI.RenameGarage(gh, mh);
+                                break;
+
+                            case "vehicle":
+                                VehicleUI.EditVehicle(lastSelectedVehicle, gh, mh);
                                 MenuBuilder.UpdateVehicleMenu(gh, mh);
                                 break;
+                        }
+                        break;
 
-                            case "searchRegnr":
-                                VehicleUI.SearchByRegnr(gh, mh);
+                    case MenuBuilder.ActionType.Delete:
+                        switch (action.data)
+                        {
+                            case "garage":
+                                VehicleUI.DeleteGarage(gh, mh);
                                 break;
 
-                            case "allaGarage":
-                                MenuBuilder.UpdateAllMenus(gh, mh);
-                                mh.current.Pop();
+                            case "vehicle":
+                                VehicleUI.DeleteVehicle(lastSelectedVehicle, gh, mh);
                                 break;
+                        }
+                        break;
 
+                    case MenuBuilder.ActionType.Create:
+                        if (action.data == "garage")
+                            VehicleUI.CreateGarage(gh, mh);
+                        else if (action.data == "vehicle")
+                        {
+                            VehicleUI.AddVehicle(gh, mh);
+                            MenuBuilder.UpdateGroupMenu(gh, mh);
+                            MenuBuilder.UpdateVehicleMenu(gh, mh);
+                        }
+                        break;
+
+                    case MenuBuilder.ActionType.Search:
+                        if (action.data == "regnr")
+                            VehicleUI.SearchByRegnr(gh, mh);
+                        break;
+
+                    case MenuBuilder.ActionType.Route:
+                        switch (action.data)
+                        {
                             case "save":
                                 gh.SaveToDb();
                                 mh.current.Pop();
@@ -73,7 +90,13 @@ namespace GarageApp
                                 mh.current.Pop();
                                 break;
 
-                            default:
+                            //case "allaGarage":
+                            //    MenuBuilder.UpdateAllMenus(gh, mh);
+                            //    mh.current.Pop();
+                            //    break;
+
+
+                            default:  // Om man valt att gå in i en meny?
                                 if (mh.currentMenu.name == "garageIndex")
                                 {
                                     gh.TrySetGarage(action.id);
@@ -97,20 +120,23 @@ namespace GarageApp
                         mh.TryGotoMenu(action.data);
                         break;
 
-                    case MenuBuilder.ActionType.back:
+                    case MenuBuilder.ActionType.Back:
                         if (mh.current.Count > 1)
                             mh.GoBack();
                         else
-                            action = new MenuAction(quit, "");
+                            action = new MenuAction(quit, "save");
                         break;
                 }
 
-                //lastAction = action;
+                // lastAction = action;
 
                 if (action.type != quit)
                     action = ConsoleHelper.RenderMenu(mh.currentMenu);
 
             } while (action.type != quit);
+
+            if (action.data == "save")
+                gh.SaveToDb();
 
             Console.SetCursorPosition(0, Console.WindowHeight - 2);  // We're done
         }

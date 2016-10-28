@@ -6,7 +6,7 @@
         public string label { get; set; }
         public MenuAction action { get; set; }
 
-        public MenuItem(string label) : this(label, new MenuAction(MenuBuilder.ActionType.noop, ""))
+        public MenuItem(string label) : this(label, new MenuAction(MenuBuilder.ActionType.Noop, ""))
         {
         }
 

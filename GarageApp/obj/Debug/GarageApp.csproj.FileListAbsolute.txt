@@ -12,3 +12,5 @@ E:\garage\GarageApp\bin\Debug\GarageApp.pdb
 E:\garage\GarageApp\obj\Debug\GarageApp.csprojResolveAssemblyReference.cache
 E:\garage\GarageApp\bin\Debug\Newtonsoft.Json.dll
 E:\garage\GarageApp\bin\Debug\Newtonsoft.Json.xml
+C:\Users\elev\Source\Repos\GarageApp\GarageApp\bin\Debug\Newtonsoft.Json.dll
+C:\Users\elev\Source\Repos\GarageApp\GarageApp\bin\Debug\Newtonsoft.Json.xml

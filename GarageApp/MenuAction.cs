@@ -25,7 +25,7 @@ namespace GarageApp
         {
         }
 
-        public MenuAction() : this(MenuBuilder.ActionType.noop)
+        public MenuAction() : this(MenuBuilder.ActionType.Noop)
         {
         }
 

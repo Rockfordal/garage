@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GarageApp
@@ -8,7 +9,7 @@ namespace GarageApp
         public GarageHandler()
         {
             garages = new List<Garage<Vehicle>>();
-            //FactorySample();
+            // FactorySample();
             FactoryEmptyGarage();
             LoadFromDb();
         }
@@ -20,45 +21,54 @@ namespace GarageApp
         internal object TryGetVehicle(int id)
         {
             Vehicle found = null;
-            IEnumerable<Vehicle> vehicles = GetCurrentGarage().vehicles
+            IEnumerable<Vehicle> vehiclesFound = GetCurrentGarage().vehicles
                 .Where(v => v.id == id)
                 .Select(b => b);
-            if (vehicles.Count() > 0)
-                found = vehicles.First();
+            if (vehiclesFound.Any())
+                found = vehiclesFound.First();
             return found;
+        }
+
+
+        internal bool TryDeleteGarage(int id)
+        {
+            var currentGarage = GetCurrentGarage();
+            var index = garages.IndexOf(currentGarage);
+            if (index == -1) return false;
+
+            var newGarages = garages
+                .Where(g => g.id != id)
+                .Select(b => b);
+
+            this.garages = newGarages.ToList<Garage<Vehicle>>();
+            return true;
         }
 
 
         internal Vehicle TryDeleteVehicle(int id)
         {
-            Vehicle vehicle = (Vehicle) TryGetVehicle(id);
-            if (vehicle != null)
-            {
-                var currentGarage = GetCurrentGarage();
-                var index = garages.IndexOf(currentGarage);
-                if (index != -1)
-                {
-                    Garage<Vehicle> foundG = garages[index];
-                    IEnumerable<Vehicle> newVehicles = GetCurrentGarage().vehicles
-                            .Where(v => v.id != id)
-                            .Select(b => b);
+            var vehicle = (Vehicle) TryGetVehicle(id);
+            if (vehicle == null) return null;
 
-                    foundG.vehicles = newVehicles.ToList<Vehicle>();
-                }
-            }
+            var currentGarage = GetCurrentGarage();
+            var index = garages.IndexOf(currentGarage);
+            if (index == -1) return vehicle;
+
+            var foundG = garages[index];
+            var newVehicles = GetCurrentGarage().vehicles
+                .Where(v => v.id != id)
+                .Select(b => b);
+
+            foundG.vehicles = newVehicles.ToList<Vehicle>();
             return vehicle;
         }
 
 
         internal void AddVehicle(Vehicle newVehicle)
         {
-            List<Vehicle> list = new List<Vehicle>();
-
-            foreach (Vehicle vehicle in GetCurrentGarage().vehicles)
-                list.Add(vehicle);
-
-            list.Add(newVehicle);
-            GetCurrentGarage().vehicles = list;
+            var currentVehicles = GetCurrentGarage().vehicles.ToList();
+            currentVehicles.Add(newVehicle);
+            GetCurrentGarage().vehicles = currentVehicles;
         }
 
 
@@ -81,9 +91,17 @@ namespace GarageApp
 
         internal Vehicle FindVehicleByRegnr(string regnr)
         {
-            return GetCurrentGarage()
-                    .vehicles
-                    .FirstOrDefault(v => v.regnr.ToLower() == regnr.ToLower());
+            var garage = GetCurrentGarage();
+            var vehicles = garage.vehicles;
+
+            if (!vehicles.Any()) return null;
+            //ConsoleHelper.Announce(vehicles.Count);
+
+            //todo: fixa krash då garaget är tomt
+            return vehicles
+                    .FirstOrDefault(v => string.Equals(v.regnr.ToLower(),
+                                                         regnr.ToLower(),
+                                                         StringComparison.Ordinal));
         }
 
 
@@ -95,30 +113,27 @@ namespace GarageApp
 
         public void LoadFromDb()
         {
-            bool error = false;
-            this.garages.Clear();
-            int c = this.garages.Count();
-            int garageCount = FileHandler.LoadAllGarages(this);
+            var error = false;
+            garages.Clear();
+            var garageCount = FileHandler.LoadAllGarages(this);
 
             if (garageCount > 0)
             {
-                Garage<Vehicle> firstg = garages.FirstOrDefault(g => true);
-                if (firstg != null)
-                    garageId = firstg.id;
+                var firstGarage = garages.FirstOrDefault(g => true);
+                if (firstGarage != null)
+                    garageId = firstGarage.id;
                 else
                     error = true;
             }
             else
                 error = true;
 
-            if (error)
-            {
-                string msg = @"Ett problem uppstod när data skulle laddas.\n
-                               Kontrollera att din datafil finns på rätt ställe,\n
-                               eller välj Databas\n Spara för att skapa en ny.";
-                ConsoleHelper.Announce(msg);
-                FactoryEmptyGarage();
-            }
+            if (!error) return;
+
+            const string msg = "Databasfilen kunde inte hittas.\nSkapar en ny åt dig (garages.json under din användarkatalog)..";
+            ConsoleHelper.Announce(msg);
+            FactoryEmptyGarage();
+            FileHandler.SaveAllGarages(this.garages);
         }
 
 
@@ -126,8 +141,7 @@ namespace GarageApp
         {
             garages.Clear();
 
-            Garage<Vehicle> garage;
-            garage = new Garage<Vehicle>("Factory Grand Garage")
+            var garage = new Garage<Vehicle>("Factory Grand Garage")
             {
                 id = 10,
                 vehicles = new List<Vehicle> {
@@ -164,6 +178,7 @@ namespace GarageApp
             garages.Add(g1);
             garageId = g1.id;
         }
+
     }
 
 }

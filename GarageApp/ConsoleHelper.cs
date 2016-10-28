@@ -7,7 +7,63 @@ namespace GarageApp
     {
         private static ConsoleKey Q             = ConsoleKey.Q;
         private static ConsoleKey Escape        = ConsoleKey.Escape;
-        private static MenuBuilder.ActionType back   = MenuBuilder.ActionType.back;
+        private static MenuBuilder.ActionType back   = MenuBuilder.ActionType.Back;
+
+
+        public static MenuAction RenderMenu(Menu menu)
+        {
+            Console.Clear();
+            ConsoleHelper.PutLabel(menu.label);
+            Console.ForegroundColor = menu.settings.PassiveColor;
+            int lowest = Console.CursorTop;
+
+            foreach (var item in menu.menuItems)
+                Console.WriteLine(item);
+
+            ConsoleKeyInfo ki;
+            ConsoleKey key;
+
+            int index = 0;
+            int indexMax = menu.menuItems.Count() - 1;
+            Console.CursorTop = lowest;
+
+            if (menu.menuItems.Any())
+                WriteActiveMenuItem(menu, index); // Aktivera första valet
+
+            do
+            {
+                ki = Console.ReadKey(true);
+                key = ki.Key;
+
+                if (key == ConsoleKey.UpArrow && index > 0)
+                {
+                    Console.SetCursorPosition(0, lowest + index);
+                    WriteInactiveMenuItem(menu, index);
+                    index -= 1;
+                    Console.SetCursorPosition(0, lowest + index);
+                    WriteActiveMenuItem(menu, index);
+                }
+                else if (key == ConsoleKey.DownArrow && index < indexMax)
+                {
+                    Console.SetCursorPosition(0, lowest + index);
+                    WriteInactiveMenuItem(menu, index);
+                    index += 1;
+                    Console.SetCursorPosition(0, lowest + index);
+                    WriteActiveMenuItem(menu, index);
+                }
+                else if (key == ConsoleKey.Enter)
+                {
+                    var item = menu.menuItems.ElementAt(index);
+                    var action = item.action;
+                    action.id = item.id;
+                    return action;
+                }
+
+            } while (! new[]{Q, Escape}.Contains(key));
+
+            return new MenuAction(back, "");
+        }
+
 
         /// <summary>
         /// Clears the screen, Shows menulabel and generates underline
@@ -32,6 +88,7 @@ namespace GarageApp
             Console.WriteLine();
         }
 
+
         /// <summary>
         /// Asks a question, and returns console input
         /// </summary>
@@ -44,11 +101,12 @@ namespace GarageApp
             return Console.ReadLine();
         }
 
+
         public static string AskQuestionText(string question, string untouched)
         {
             string newText = AskQuestionText(question);
 
-            if (newText.Count() > 0)
+            if (newText.Any())
                 return newText;
             else
                 return untouched;
@@ -64,7 +122,6 @@ namespace GarageApp
             return num;
         }
 
-
         public static int AskQuestionInt(string question, int untouched)
         {
             ClearLine();
@@ -73,13 +130,14 @@ namespace GarageApp
             string s = Console.ReadLine();
             int.TryParse(s, out num);
 
-            if (s.Count() > 0)
+            if (s.Any())
                 return num;
             else
                 return untouched;
         }
 
-        private static void ClearLine()
+
+        public static void ClearLine()
         {
             int left = Console.CursorLeft;
             Console.Write("                             ");
@@ -93,76 +151,19 @@ namespace GarageApp
             Console.ReadKey(true);
         }
 
-        public static void Pause()
-        {
-            Console.ReadKey(true);
-        }
 
-        public static MenuAction RenderMenu(Menu menu)
-        {
-            Console.Clear();
-            ConsoleHelper.PutLabel(menu.label);
-            Console.ForegroundColor = menu.settings.PassiveColor;
-            int lowest = Console.CursorTop;
-
-            foreach (var item in menu.menuItems)
-                Console.WriteLine(item);
-
-            ConsoleKeyInfo ki;
-            ConsoleKey key;
-
-            int index = 0;
-            int indexMax = menu.menuItems.Count() - 1;
-            Console.CursorTop = lowest;
-
-            if (menu.menuItems.Count() > 0)
-                WriteActive(menu, index); // Aktivera första valet
-
-            do
-            {
-                ki = Console.ReadKey(true);
-                key = ki.Key;
-
-                if (key == ConsoleKey.UpArrow && index > 0)
-                {
-                    Console.SetCursorPosition(0, lowest + index);
-                    WriteInactive(menu, index);
-                    index -= 1;
-                    Console.SetCursorPosition(0, lowest + index);
-                    WriteActive(menu, index);
-                }
-                else if (key == ConsoleKey.DownArrow && index < indexMax)
-                {
-                    Console.SetCursorPosition(0, lowest + index);
-                    WriteInactive(menu, index);
-                    index += 1;
-                    Console.SetCursorPosition(0, lowest + index);
-                    WriteActive(menu, index);
-                }
-                else if (key == ConsoleKey.Enter)
-                {
-                    var item = menu.menuItems.ElementAt(index);
-                    var action = item.action;
-                    action.id = item.id;
-                    return action;
-                }
-
-            } while (! new[]{Q, Escape}.Contains(key));
-
-            return new MenuAction(back, "");
-        }
-
-        private static void WriteActive(Menu menu, int index)
+        private static void WriteActiveMenuItem(Menu menu, int index)
         {
             Console.ForegroundColor = menu.settings.ActiveColor;
             Console.Write(menu.menuItems.ElementAt(index));
         }
 
-        private static void WriteInactive(Menu menu, int index)
+        private static void WriteInactiveMenuItem(Menu menu, int index)
         {
             Console.ForegroundColor = menu.settings.PassiveColor;
             Console.Write(menu.menuItems.ElementAt(index));
         }
+
 
         internal static string GetTypeOf(Vehicle v)
         {
@@ -175,20 +176,22 @@ namespace GarageApp
         internal static void Announce(string text)
         {
             var oldFg = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\n\n");
             Console.WriteLine(text);
             Console.ForegroundColor = oldFg;
-            ConsoleHelper.Pause();
+            Pause();
         }
 
         internal static void Announce(string label,string text)
         {
             var oldFg = Console.ForegroundColor;
-            ConsoleHelper.PutLabel(label);
+            PutLabel(label);
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(text);
             Console.ForegroundColor = oldFg;
-            ConsoleHelper.Pause();
+            Pause();
         }
 
         internal static void Announce(int num)
@@ -197,11 +200,17 @@ namespace GarageApp
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(num.ToString());
             Console.ForegroundColor = oldFg;
-            ConsoleHelper.Pause();
+            Pause();
         }
 
 
-        internal static string SafeSub(string field, int num)
+        public static void Pause()
+        {
+            Console.ReadKey(true);
+        }
+
+
+        public static string SafeSub(string field, int num)
         {
             if (field != null)
             {
@@ -216,7 +225,7 @@ namespace GarageApp
         }
 
 
-        internal static string SafeSub(int field, int num)
+        public static string SafeSub(int field, int num)
         {
             return SafeSub(field.ToString(), num);
         }
