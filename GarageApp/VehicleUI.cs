@@ -16,67 +16,73 @@ namespace GarageApp
         internal static void EditVehicle(int id, GarageHandler gh, MenuHandler mh)
         {
             var vehicle = (Vehicle) gh.TryGetVehicle(id);
-            if (vehicle != null)
+
+            if (vehicle == null)
             {
-                var action = new MenuAction(); // skrivs över
+                ConsoleHelper.Announce("Kunde inte hitta fordonet med id " + id);
+                return;
+            };
 
-                do
+            var action = new MenuAction(); // skrivs över
+
+            do
+            {
+                Menu editMenu = new Menu("vehicleEdit", "Redigerar fordon", 
+                    new List<MenuItem> {
+                        new MenuItem("Namn:  " + vehicle.name,   new MenuAction(Noop, "namn")),
+                        new MenuItem("Färg:  " + vehicle.color,  new MenuAction(Noop, "color")),
+                        new MenuItem("Vikt:  " + vehicle.weight, new MenuAction(Noop, "weight")),
+                        new MenuItem("Regnr: " + vehicle.regnr,  new MenuAction(Noop, "regnr")),
+                        new MenuItem(""),
+                        new MenuItem("Ta bort",  new MenuAction(Delete, "vehicle"))
+                    });
+
+                action = ConsoleHelper.RenderMenu(editMenu);
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                int pos = Console.CursorTop;
+                // Console.SetCursorPosition(0, pos - 1);
+
+                switch (action.data)
                 {
-                    Menu editMenu = new Menu("vehicleEdit", "Redigerar fordon", 
-                        new List<MenuItem> {
-                            new MenuItem("Namn:  " + vehicle.name,   new MenuAction(Noop, "namn")),
-                            new MenuItem("Färg:  " + vehicle.color,  new MenuAction(Noop, "color")),
-                            new MenuItem("Vikt:  " + vehicle.weight, new MenuAction(Noop, "weight")),
-                            new MenuItem("Regnr: " + vehicle.regnr,  new MenuAction(Noop, "regnr")),
-                            new MenuItem(""),
-                            new MenuItem("Ta bort",  new MenuAction(Delete, "vehicle"))
-                        });
+                    case "namn":
+                        Console.SetCursorPosition(0, 3);
+                        Console.WriteLine("Ändra namn");
+                        Console.ForegroundColor = mh.settings.ActiveColor;
+                        vehicle.name = ConsoleHelper.AskQuestionText("Namn", vehicle.name);
+                        break;
 
-                    action = ConsoleHelper.RenderMenu(editMenu);
+                    case "color":
+                        Console.SetCursorPosition(0, 3);
+                        Console.WriteLine("Ändra färg");
+                        Console.SetCursorPosition(0, 5);
+                        Console.ForegroundColor = mh.settings.ActiveColor;
+                        vehicle.color = ConsoleHelper.AskQuestionText("Färg", vehicle.color);
+                        break;
 
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    int pos = Console.CursorTop;
-                    // Console.SetCursorPosition(0, pos - 1);
+                    case "weight":
+                        Console.SetCursorPosition(0, 3);
+                        Console.WriteLine("Ändra vikt");
+                        Console.SetCursorPosition(0, 6);
+                        Console.ForegroundColor = mh.settings.ActiveColor;
+                        vehicle.weight = ConsoleHelper.AskQuestionInt("Vikt", vehicle.weight);
+                        break;
 
-                    switch (action.data)
-                    {
-                        case "namn":
-                            Console.SetCursorPosition(0, 3);
-                            Console.WriteLine("Ändra namn");
-                            Console.ForegroundColor = mh.settings.ActiveColor;
-                            vehicle.name = ConsoleHelper.AskQuestionText("Namn", vehicle.name);
-                            break;
+                    case "regnr":
+                        Console.SetCursorPosition(0, 3);
+                        Console.WriteLine("Ändra regnr");
+                        Console.SetCursorPosition(0, 7);
+                        Console.ForegroundColor = mh.settings.ActiveColor;
+                        vehicle.regnr = ConsoleHelper.AskQuestionText("Regnr", vehicle.regnr);
+                        break;
 
-                        case "color":
-                            Console.SetCursorPosition(0, 3);
-                            Console.WriteLine("Ändra färg");
-                            Console.SetCursorPosition(0, 5);
-                            Console.ForegroundColor = mh.settings.ActiveColor;
-                            vehicle.color = ConsoleHelper.AskQuestionText("Färg", vehicle.color);
-                            break;
-
-                        case "weight":
-                            Console.SetCursorPosition(0, 3);
-                            Console.WriteLine("Ändra vikt");
-                            Console.SetCursorPosition(0, 6);
-                            Console.ForegroundColor = mh.settings.ActiveColor;
-                            vehicle.weight = ConsoleHelper.AskQuestionInt("Vikt", vehicle.weight);
-                            break;
-
-                        case "regnr":
-                            Console.SetCursorPosition(0, 3);
-                            Console.WriteLine("Ändra regnr");
-                            Console.SetCursorPosition(0, 7);
-                            Console.ForegroundColor = mh.settings.ActiveColor;
-                            vehicle.regnr = ConsoleHelper.AskQuestionText("Regnr", vehicle.regnr);
-                            break;
-
-                    }
+                }
                 Console.ForegroundColor = mh.settings.PassiveColor;
                 // ConsoleHelper.Announce("type(" + action.type + ") (" + action.data + ") "+ action.id);
 
-                } while (action.type != MenuBuilder.ActionType.Back);
-            }
+            } while (action.type != MenuBuilder.ActionType.Back);
+
+            MenuBuilder.UpdateVehicleMenu(gh, mh);
         }
 
 
@@ -130,7 +136,7 @@ namespace GarageApp
         }
 
 
-        internal static void AddVehicle(GarageHandler gh, MenuHandler mh)
+        internal static int AddVehicle(GarageHandler gh, MenuHandler mh)
         {
             Vehicle vehicle;
             ConsoleHelper.PutLabel("Lägg till fordon");
@@ -150,7 +156,11 @@ namespace GarageApp
                 vehicle = new Vehicle(); 
 
             gh.AddVehicle(vehicle);
-            MenuBuilder.UpdateVehicleMenu(gh, mh);
+
+            MenuBuilder.UpdateGarageMenu(gh, mh);
+            MenuBuilder.UpdateGroupMenu(gh, mh);
+
+            return vehicle.id;
         }
 
 

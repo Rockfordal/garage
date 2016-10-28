@@ -6,7 +6,7 @@
         {
         }
 
-        public OneWheeler(int id, string name, string color, string regnr, int weight) : base(id, name, color, regnr, weight)
+        public OneWheeler(string name, string color, string regnr, int weight) : base(name, color, regnr, weight)
         {
             this.wheelCount = 1;
         }

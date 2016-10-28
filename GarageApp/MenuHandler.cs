@@ -20,7 +20,7 @@ namespace GarageApp
             }
             set
             { 
-                var varde = value.name;
+                var varde = value.Name;
                 if (current != null && current.Count != 0)
                     lastMenu = current.Peek();
                 current.Push(varde);
@@ -42,14 +42,14 @@ namespace GarageApp
 
         public void AddMenu(Menu menu)
         {
-            menus.Add(menu.name, menu);
+            menus.Add(menu.Name, menu);
             if (currentMenu == null)
                 currentMenu = menu;
         }
 
         public override string ToString()
         {
-            return currentMenu.name;
+            return currentMenu.Name;
         }
 
         internal void TryGotoMenu(string name)

@@ -4,14 +4,14 @@ namespace GarageApp
 {
     class Program
     {
-        private static MenuBuilder.ActionType quit   = MenuBuilder.ActionType.Quit;
+        private const MenuBuilder.ActionType Quit = MenuBuilder.ActionType.Quit;
 
         static void Main(string[] args)
         {
             var gh     = new GarageHandler();
             var mh     = new MenuHandler();
             var action = new MenuAction();
-            int lastSelectedVehicle = 0;
+            var lastSelectedVehicle = 0;
             // var lastAction = action;
 
             MenuBuilder.UpdateAllMenus(gh, mh);
@@ -29,7 +29,7 @@ namespace GarageApp
                                 break;
 
                             case "vehicle":
-                                VehicleUI.EditVehicle(lastSelectedVehicle, gh, mh);
+                                VehicleUI.EditVehicle(action.id, gh, mh);
                                 MenuBuilder.UpdateVehicleMenu(gh, mh);
                                 break;
                         }
@@ -49,13 +49,16 @@ namespace GarageApp
                         break;
 
                     case MenuBuilder.ActionType.Create:
-                        if (action.data == "garage")
-                            VehicleUI.CreateGarage(gh, mh);
-                        else if (action.data == "vehicle")
+                        switch (action.data)
                         {
-                            VehicleUI.AddVehicle(gh, mh);
-                            MenuBuilder.UpdateGroupMenu(gh, mh);
-                            MenuBuilder.UpdateVehicleMenu(gh, mh);
+                            case "garage":
+                                VehicleUI.CreateGarage(gh, mh);
+                                break;
+
+                            case "vehicle":
+                                var newId = VehicleUI.AddVehicle(gh, mh);
+                                VehicleUI.EditVehicle(newId, gh, mh);
+                                break;
                         }
                         break;
 
@@ -97,24 +100,27 @@ namespace GarageApp
 
 
                             default:  // Om man valt att gå in i en meny?
-                                if (mh.currentMenu.name == "garageIndex")
+                                switch (mh.currentMenu.Name)
                                 {
-                                    gh.TrySetGarage(action.id);
-                                    MenuBuilder.UpdateVehicleMenu(gh, mh);
-                                    // mh.current.Pop(); // Glöm garagemenyn (hoppa direkt till huvudmenyn på tillbakavägen)
-                                    mh.current.Push("vehicleIndex");
-                                }
-                                else if (mh.currentMenu.name == "vehicleIndex")
-                                {
-                                    lastSelectedVehicle = action.id;
-                                    //ConsoleHelper.Announce("vInd");
-                                    MenuBuilder.AddVehiclesToOptionsMenu(gh, mh, lastSelectedVehicle);
-                                }
-                                //else if (mh.currentMenu.name == "vehicleOptions")
+                                    case "garageIndex":
+                                        gh.TrySetGarage(action.id);
+                                        MenuBuilder.UpdateVehicleMenu(gh, mh);
+                                        // mh.current.Pop(); // Glöm garagemenyn (hoppa direkt till huvudmenyn på tillbakavägen)
+                                        mh.current.Push("vehicleIndex");
+                                        break;
+                                    case "vehicleIndex":
+                                        lastSelectedVehicle = action.id;
+                                        //ConsoleHelper.Announce("har valt fordon " + action.id);
+                                        MenuBuilder.AddVehiclesToOptionsMenu(gh, mh, lastSelectedVehicle);
+                                        break;
+                                // default:
+                                // if (mh.currentMenu.name == "vehicleOptions")
                                 //{
                                 //    ConsoleHelper.Announce("vOpt");
                                 //    //MenuBuilder.AddVehiclesToOptionsMenu(gh, mh);
                                 //}
+                                // break;
+                                }
                                 break;
                         }
                         mh.TryGotoMenu(action.data);
@@ -124,16 +130,16 @@ namespace GarageApp
                         if (mh.current.Count > 1)
                             mh.GoBack();
                         else
-                            action = new MenuAction(quit, "save");
+                            action = new MenuAction(Quit, "save");
                         break;
                 }
 
                 // lastAction = action;
 
-                if (action.type != quit)
+                if (action.type != Quit)
                     action = ConsoleHelper.RenderMenu(mh.currentMenu);
 
-            } while (action.type != quit);
+            } while (action.type != Quit);
 
             if (action.data == "save")
                 gh.SaveToDb();

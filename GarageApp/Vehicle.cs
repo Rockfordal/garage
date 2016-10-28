@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
 
 namespace GarageApp
 {
     class Vehicle
     {
+        public static int NextId = 0;
         public int    id         { get; set; }
         public string name       { get; set; }
         public string regnr      { get; set; }
@@ -19,9 +19,9 @@ namespace GarageApp
         }
 
 
-        public Vehicle(int id, string name, string color, string regnr, int weight)
+        public Vehicle(string name, string color, string regnr, int weight)
         {
-            this.id     = id;
+            this.id = NextId++;
             this.name   = name;
             this.color  = color;
             this.regnr  = regnr;
@@ -31,16 +31,21 @@ namespace GarageApp
 
         public Vehicle()
         {
+            this.id = NextId++;
             this.name = "";
         }
 
 
         public override string ToString()
         {
-            string colorF  = ConsoleHelper.SafeSub(color, 7);
-            string nameF   = ConsoleHelper.SafeSub(name, 20);
-            string weightF = ConsoleHelper.SafeSub(weight, 4);
-            return String.Format("{0, 7} {1, 20} {2, 4}kg", colorF , nameF, weightF);
+            var colorW = 10;
+            var nameW = 20;
+            var weightW = 4;
+            string colorF  = ConsoleHelper.SafeSub(color, colorW);
+            string nameF   = ConsoleHelper.SafeSub(name, nameW);
+            string weightF = ConsoleHelper.SafeSub(weight, weightW);
+            //     return String.Format("{0, 10} {1, 20} {2, 4}kg", colorF , nameF, weightF);
+            return String.Format("{0, 2} {1, 10} {2, 20} {3, 4}kg", id, colorF , nameF, weightF);
         }
 
     }

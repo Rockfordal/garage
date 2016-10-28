@@ -13,21 +13,21 @@ namespace GarageApp
         public static MenuAction RenderMenu(Menu menu)
         {
             Console.Clear();
-            ConsoleHelper.PutLabel(menu.label);
-            Console.ForegroundColor = menu.settings.PassiveColor;
+            ConsoleHelper.PutLabel(menu.Label);
+            Console.ForegroundColor = menu.Settings.PassiveColor;
             int lowest = Console.CursorTop;
 
-            foreach (var item in menu.menuItems)
+            foreach (var item in menu.MenuItems)
                 Console.WriteLine(item);
 
             ConsoleKeyInfo ki;
             ConsoleKey key;
 
             int index = 0;
-            int indexMax = menu.menuItems.Count() - 1;
+            int indexMax = menu.MenuItems.Count() - 1;
             Console.CursorTop = lowest;
 
-            if (menu.menuItems.Any())
+            if (menu.MenuItems.Any())
                 WriteActiveMenuItem(menu, index); // Aktivera första valet
 
             do
@@ -53,7 +53,7 @@ namespace GarageApp
                 }
                 else if (key == ConsoleKey.Enter)
                 {
-                    var item = menu.menuItems.ElementAt(index);
+                    var item = menu.MenuItems.ElementAt(index);
                     var action = item.action;
                     action.id = item.id;
                     return action;
@@ -154,14 +154,14 @@ namespace GarageApp
 
         private static void WriteActiveMenuItem(Menu menu, int index)
         {
-            Console.ForegroundColor = menu.settings.ActiveColor;
-            Console.Write(menu.menuItems.ElementAt(index));
+            Console.ForegroundColor = menu.Settings.ActiveColor;
+            Console.Write(menu.MenuItems.ElementAt(index));
         }
 
         private static void WriteInactiveMenuItem(Menu menu, int index)
         {
-            Console.ForegroundColor = menu.settings.PassiveColor;
-            Console.Write(menu.menuItems.ElementAt(index));
+            Console.ForegroundColor = menu.Settings.PassiveColor;
+            Console.Write(menu.MenuItems.ElementAt(index));
         }
 
 

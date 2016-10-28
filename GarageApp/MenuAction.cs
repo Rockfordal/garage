@@ -1,6 +1,4 @@
-﻿using Microsoft.Win32.SafeHandles;
-
-namespace GarageApp
+﻿namespace GarageApp
 {
     class MenuAction
     {

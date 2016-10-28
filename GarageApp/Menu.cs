@@ -1,21 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace GarageApp
 {
     class Menu
     {
-        public string name { get; set; }
-        public string label { get; set; }
-        public IEnumerable<MenuItem> menuItems { get; set; }
-        public MenuSettings settings { get; set; }
+        public string Name { get; set; }
+        public string Label { get; set; }
+        public IEnumerable<MenuItem> MenuItems { get; set; }
+        public MenuSettings Settings { get; set; }
 
         public Menu(string name, string label, IEnumerable<MenuItem> newItems)
         {
-            this.name = name;
-            this.label = label;
-            this.settings = new MenuSettings();
-            this.menuItems = newItems;
+            this.Name = name;
+            this.Label = label;
+            this.Settings = new MenuSettings();
+            this.MenuItems = newItems;
         }
 
         public Menu(string name, string label) : this(name, label, new List<MenuItem>())

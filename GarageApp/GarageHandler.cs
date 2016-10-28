@@ -145,10 +145,10 @@ namespace GarageApp
             {
                 id = 10,
                 vehicles = new List<Vehicle> {
-                    new Car(201, "Ford Escort", "vit", "YEO403", 825),
-                    new Car(202, "Audi R8", "black", "SUP775", 790),
-                    new Motorcycle(203, "Honda", "red", "AY16", 150),
-                    new OneWheeler(204, "Wheely", "yellow", "CY15", 4)
+                    new Car("Ford Escort", "vit", "YEO403", 825),
+                    new Car("Audi R8", "black", "SUP775", 790),
+                    new Motorcycle("Honda", "red", "AY16", 150),
+                    new OneWheeler("Wheely", "yellow", "CY15", 4)
                 }
             };
             garages.Add(garage);
@@ -157,11 +157,11 @@ namespace GarageApp
             {
                 id = 11,
                 vehicles = new List<Vehicle> {
-                    new Car(101, "Ferarri Testarossa", "gul", "SKE001", 825),
-                    new Car(102, "Audi R8", "black", "KUP006", 790),
-                    new Motorcycle(103, "Honda", "red", "AY305", 150),
-                    new Airplane(104, "Flyer", "pink", "P3001", 1600),
-                    new Buss(205, "TaxiBuss", "svart", "BB0011", 3000)
+                    new Car("Ferarri Testarossa", "gul", "SKE001", 825),
+                    new Car("Audi R8", "black", "KUP006", 790),
+                    new Motorcycle("Honda", "red", "AY305", 150),
+                    new Airplane("Flyer", "pink", "P3001", 1600),
+                    new Buss("TaxiBuss", "svart", "BB0011", 3000)
                 }
             };
             garages.Add(garage);
