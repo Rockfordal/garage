@@ -26,9 +26,11 @@ namespace GarageApp
         internal static void UpdateMainMenu(GarageHandler gh, MenuHandler mh)
         {
             mh.menus.Remove("main");
-            var mainLabel = "Huvudmeny (" + Vehicle.NextId + ")";
+            // var mainLabel = "Huvudmeny (" + Vehicle.NextId + ")";
+            var mainLabel = "Huvudmeny";
+            var garageLabel = "Garage (" + gh.garages.Count + "st)";
             mh.AddMenu(new Menu("main", mainLabel, new List<MenuItem> {
-                        new MenuItem("Garage",                 new MenuAction(Route, "garageIndex")),
+                        new MenuItem(garageLabel,              new MenuAction(Route, "garageIndex")),
                         new MenuItem("Grupper",                new MenuAction(Route, "allGroupIndex")),
                         // new MenuItem("Lista alla fordon (todo)",  new MenuAction(route, "vehicleIndex")),
                         new MenuItem("Sök på Regnr",           new MenuAction(Search, "regnr")),
