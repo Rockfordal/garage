@@ -17,19 +17,17 @@ namespace GarageApp
 
         internal static void UpdateAllMenus(GarageHandler gh, MenuHandler mh)
         {
-            if (!MainLoadedOnce)
-            {
-                MenuBuilder.UpdateMainMenu(gh, mh);
-            }
+            MenuBuilder.UpdateMainMenu(gh, mh);
             MenuBuilder.UpdateGarageMenu(gh, mh);
             MenuBuilder.UpdateGroupMenu(gh, mh);
             MenuBuilder.UpdateVehicleMenu(gh, mh);
         }
 
-        public static bool MainLoadedOnce = false;
         internal static void UpdateMainMenu(GarageHandler gh, MenuHandler mh)
         {
-            mh.AddMenu(new Menu("main", "Huvudmeny", new List<MenuItem> {
+            mh.menus.Remove("main");
+            var mainLabel = "Huvudmeny (" + Vehicle.NextId + ")";
+            mh.AddMenu(new Menu("main", mainLabel, new List<MenuItem> {
                         new MenuItem("Garage",                 new MenuAction(Route, "garageIndex")),
                         new MenuItem("Grupper",                new MenuAction(Route, "allGroupIndex")),
                         // new MenuItem("Lista alla fordon (todo)",  new MenuAction(route, "vehicleIndex")),
@@ -37,21 +35,19 @@ namespace GarageApp
                         new MenuItem("Databas",                new MenuAction(Route, "fileOptions")),
                         new MenuItem("Avsluta utan att spara", new MenuAction(Quit)) }));
 
+            mh.menus.Remove("fileOptions");
             mh.AddMenu(new Menu("fileOptions", "Databasåtgärder", new List<MenuItem> {
                         new MenuItem("Ladda från db",          new MenuAction(Route, "load")),
                         new MenuItem("Ladda testData",         new MenuAction(Route, "reset")),
                         new MenuItem("Töm",                    new MenuAction(Route, "clear")),
-                        new MenuItem("Spara till db",          new MenuAction(Route, "save"))
-            }));
-
-            MenuBuilder.MainLoadedOnce = true;
+                        new MenuItem("Spara till db",          new MenuAction(Route, "save")) }));
         }
 
 
         internal static void UpdateGroupMenu(GarageHandler gh, MenuHandler mh)
         {
             mh.menus.Remove("allGroupIndex");
-            var vehicles = gh.GetCurrentGarage().vehicles;
+            var vehicles = gh.GetCurrentGarage().Vehicles;
             mh.AddMenu(new Menu("allGroupIndex", "Välj grupp",
                             MenuConverter.VehiclesToMenuItemsByGroup(vehicles)));
         }
@@ -63,6 +59,9 @@ namespace GarageApp
             var items = (List<MenuItem>) MenuConverter.GaragesToMenuItems(gh.garages);
 
             mh.AddMenu(new Menu("garageIndex", "Välj garage", items));
+
+            var labelRow = Garage<Vehicle>.ToHeader();
+            items.Insert(0, new MenuItem(labelRow));
 
             items.Add(new MenuItem(""));
             items.Add(new MenuItem("Nytt garage", new MenuAction(Create, "garage")));
@@ -79,14 +78,16 @@ namespace GarageApp
 
             if (currentGarage != null)
             {
-                
-                items = (List<MenuItem>) MenuConverter.VehiclesToMenuItems(currentGarage.vehicles);
-                garageName = currentGarage.name;
+                items = (List<MenuItem>) MenuConverter.VehiclesToMenuItems(currentGarage.Vehicles);
+                garageName = currentGarage.Name;
             }
             else
             {
                 garageName = "";
             }
+
+            var labelRow = Vehicle.ToHeader();
+            items.Insert(0, new MenuItem(labelRow));
 
             items.Add(new MenuItem(""));
             items.Add(new MenuItem("Nytt fordon",        new MenuAction(Create, "vehicle")));
@@ -94,19 +95,6 @@ namespace GarageApp
             items.Add(new MenuItem("Ta bort garage",     new MenuAction(Delete, "garage")));
 
             mh.AddMenu(new Menu("vehicleIndex", garageName + " -> Välj fordon", items));
-        }
-
-
-        internal static void AddVehiclesToOptionsMenu(GarageHandler gh, MenuHandler mh, int id)
-        {
-            var found = (Vehicle) gh.TryGetVehicle(id);
-            var items = (List<MenuItem>) MenuConverter.VehicleToDetailedMenuItems(found);
-
-            items.Add(new MenuItem("Redigera",    new MenuAction(Edit,   "vehicle")));
-            items.Add(new MenuItem("Ta bort",     new MenuAction(Delete, "vehicle")));
-
-            mh.menus.Remove("vehicleOptions");
-            mh.AddMenu(new Menu("vehicleOptions", "Fordonsåtgärd", items));
         }
 
     }

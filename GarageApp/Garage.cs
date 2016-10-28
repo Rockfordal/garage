@@ -5,35 +5,35 @@ namespace GarageApp
 {
     class Garage<T> where T : Vehicle
     {
-        public int id                  { get; set; }
-        public string name             { get; set; }
-        public ICollection<T> vehicles { get; set; }
+        public static int NextId = 0;
+        public int Id                  { get; set; }
+        public string Name             { get; set; }
+        public ICollection<T> Vehicles { get; set; }
 
         private static int nextId = 0;
 
-        public Garage(int id, string name)
-        {
-            // todo: implement id duplication check or remove this constructor
-            this.id = id;
-            this.name = name;
-            this.vehicles = new List<T>();
-        }
-
         public Garage(string name)
         {
-            nextId += 1;
-            this.id = nextId;
-            this.name = name;
-            this.vehicles = new List<T>();
+            this.Id = NextId++;
+            this.Name = name;
+            this.Vehicles = new List<T>();
         }
 
         public Garage() : this("")
         {
         }
 
+
+        public static string ToHeader()
+        {
+            return string.Format("{0, 0} {1, 30} {2, 5}", "Id", "Namn    ", "Antal fordon");
+        }
+
+
         public override string ToString()
         {
-            return String.Format("{1, 30} {2, 3}", id, name, vehicles.Count);
+                  //return string.Format("{1, 30} {2, 3}", Id, Name, Vehicles.Count);
+            return string.Format("{0, 0}{1, 30} {2, 5}", Id, Name, Vehicles.Count);
         }
     }
 }

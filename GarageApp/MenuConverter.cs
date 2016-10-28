@@ -63,7 +63,7 @@ namespace GarageApp
 
         internal static MenuItem GarageToMenuItem(Garage<Vehicle> garage)
         {
-            return new MenuItem(garage.ToString(), new MenuAction(MenuBuilder.ActionType.Route, "garageOptions"), garage.id);
+            return new MenuItem(garage.ToString(), new MenuAction(MenuBuilder.ActionType.Route, "garageOptions"), garage.Id);
         }
 
 

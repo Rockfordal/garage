@@ -30,7 +30,6 @@ namespace GarageApp
 
                             case "vehicle":
                                 VehicleUI.EditVehicle(action.id, gh, mh);
-                                MenuBuilder.UpdateVehicleMenu(gh, mh);
                                 break;
                         }
                         break;
@@ -108,20 +107,13 @@ namespace GarageApp
                                         // mh.current.Pop(); // Glöm garagemenyn (hoppa direkt till huvudmenyn på tillbakavägen)
                                         mh.current.Push("vehicleIndex");
                                         break;
-                                    case "vehicleIndex":
-                                        lastSelectedVehicle = action.id;
-                                        //ConsoleHelper.Announce("har valt fordon " + action.id);
-                                        MenuBuilder.AddVehiclesToOptionsMenu(gh, mh, lastSelectedVehicle);
-                                        break;
-                                // default:
-                                // if (mh.currentMenu.name == "vehicleOptions")
-                                //{
-                                //    ConsoleHelper.Announce("vOpt");
-                                //    //MenuBuilder.AddVehiclesToOptionsMenu(gh, mh);
-                                //}
-                                // break;
+                                    //case "vehicleIndex":
+                                    //    lastSelectedVehicle = action.id;
+                                        // Vi hoppar direkt till redigera nu, så tror inte denna behövs:
+                                        //MenuBuilder.AddVehiclesToOptionsMenu(gh, mh, lastSelectedVehicle);
+                                        //break;
                                 }
-                                break;
+                            break;
                         }
                         mh.TryGotoMenu(action.data);
                         break;

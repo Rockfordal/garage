@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Security.Policy;
 
 namespace GarageApp
 {
     class VehicleUI
     {
         private static MenuBuilder.ActionType Noop   = MenuBuilder.ActionType.Noop;
-        private static MenuBuilder.ActionType Edit   = MenuBuilder.ActionType.Edit;
         private static MenuBuilder.ActionType Delete = MenuBuilder.ActionType.Delete;
 
         // Todo: Ej klar! (det ska bli direkt-redigering i fordonsmenyn)
@@ -34,7 +31,7 @@ namespace GarageApp
                         new MenuItem("Vikt:  " + vehicle.weight, new MenuAction(Noop, "weight")),
                         new MenuItem("Regnr: " + vehicle.regnr,  new MenuAction(Noop, "regnr")),
                         new MenuItem(""),
-                        new MenuItem("Ta bort",  new MenuAction(Delete, "vehicle"))
+                        new MenuItem("Ta bort!",  new MenuAction(Noop, "deleteVehicle"))
                     });
 
                 action = ConsoleHelper.RenderMenu(editMenu);
@@ -45,6 +42,11 @@ namespace GarageApp
 
                 switch (action.data)
                 {
+                    case "deleteVehicle":
+                        gh.TryDeleteVehicle(vehicle.id);
+                        MenuBuilder.UpdateAllMenus(gh, mh);
+                        return;
+
                     case "namn":
                         Console.SetCursorPosition(0, 3);
                         Console.WriteLine("Ändra namn");
@@ -88,9 +90,9 @@ namespace GarageApp
 
         internal static void DeleteVehicle(int id, GarageHandler gh, MenuHandler mh)
         {
-            int beforeC = gh.GetCurrentGarage().vehicles.Count();
+            int beforeC = gh.GetCurrentGarage().Vehicles.Count();
             Vehicle vehicle = (Vehicle) gh.TryDeleteVehicle(id);
-            int afterC = gh.GetCurrentGarage().vehicles.Count();
+            int afterC = gh.GetCurrentGarage().Vehicles.Count();
 
             if (vehicle != null && afterC == beforeC - 1)
             {
@@ -125,7 +127,7 @@ namespace GarageApp
                 MenuBuilder.UpdateVehicleMenu(gh, mh);
 
                 var firstGarage = gh.garages.FirstOrDefault();
-                gh.TrySetGarage(firstGarage.id);
+                gh.TrySetGarage(firstGarage.Id);
 
                 mh.GoBack();
             }
@@ -157,8 +159,9 @@ namespace GarageApp
 
             gh.AddVehicle(vehicle);
 
-            MenuBuilder.UpdateGarageMenu(gh, mh);
-            MenuBuilder.UpdateGroupMenu(gh, mh);
+            //MenuBuilder.UpdateGarageMenu(gh, mh);
+            //MenuBuilder.UpdateGroupMenu(gh, mh);
+            MenuBuilder.UpdateAllMenus(gh, mh);
 
             return vehicle.id;
         }
@@ -184,7 +187,7 @@ namespace GarageApp
             ConsoleColor oldFg = Console.ForegroundColor;
             Console.ForegroundColor = mh.settings.ActiveColor;
             string name = ConsoleHelper.AskQuestionText("Nytt namn");
-            gh.GetCurrentGarage().name = name;
+            gh.GetCurrentGarage().Name = name;
             MenuBuilder.UpdateGarageMenu(gh, mh);
             MenuBuilder.UpdateVehicleMenu(gh, mh);
             Console.ForegroundColor = oldFg;

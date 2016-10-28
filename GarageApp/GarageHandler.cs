@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace GarageApp
 {
     class GarageHandler
     {
+        public List<Garage<Vehicle>> garages  { get; set; }
+        public int                   garageId { get; set; }
+
         public GarageHandler()
         {
             garages = new List<Garage<Vehicle>>();
             // FactorySample();
-            FactoryEmptyGarage();
+            // FactoryEmptyGarage();
             LoadFromDb();
         }
-
-        public List<Garage<Vehicle>> garages  { get; set; }
-        public int                   garageId { get; set; }
-
 
         internal object TryGetVehicle(int id)
         {
             Vehicle found = null;
-            IEnumerable<Vehicle> vehiclesFound = GetCurrentGarage().vehicles
+            IEnumerable<Vehicle> vehiclesFound = GetCurrentGarage().Vehicles
                 .Where(v => v.id == id)
                 .Select(b => b);
             if (vehiclesFound.Any())
@@ -37,7 +37,7 @@ namespace GarageApp
             if (index == -1) return false;
 
             var newGarages = garages
-                .Where(g => g.id != id)
+                .Where(g => g.Id != id)
                 .Select(b => b);
 
             this.garages = newGarages.ToList<Garage<Vehicle>>();
@@ -55,26 +55,26 @@ namespace GarageApp
             if (index == -1) return vehicle;
 
             var foundG = garages[index];
-            var newVehicles = GetCurrentGarage().vehicles
+            var newVehicles = GetCurrentGarage().Vehicles
                 .Where(v => v.id != id)
                 .Select(b => b);
 
-            foundG.vehicles = newVehicles.ToList<Vehicle>();
+            foundG.Vehicles = newVehicles.ToList<Vehicle>();
             return vehicle;
         }
 
 
         internal void AddVehicle(Vehicle newVehicle)
         {
-            var currentVehicles = GetCurrentGarage().vehicles.ToList();
+            var currentVehicles = GetCurrentGarage().Vehicles.ToList();
             currentVehicles.Add(newVehicle);
-            GetCurrentGarage().vehicles = currentVehicles;
+            GetCurrentGarage().Vehicles = currentVehicles;
         }
 
 
         internal void TrySetGarage(int id)
         {
-            var found = garages.FirstOrDefault(g => g.id == id);
+            var found = garages.FirstOrDefault(g => g.Id == id);
 
             if (found != null)
                 garageId = id;
@@ -85,17 +85,16 @@ namespace GarageApp
 
         public Garage<Vehicle> GetCurrentGarage()
         {
-            return garages.FirstOrDefault(g => g.id == garageId);
+            return garages.FirstOrDefault(g => g.Id == garageId);
         }
 
 
         internal Vehicle FindVehicleByRegnr(string regnr)
         {
             var garage = GetCurrentGarage();
-            var vehicles = garage.vehicles;
+            var vehicles = garage.Vehicles;
 
             if (!vehicles.Any()) return null;
-            //ConsoleHelper.Announce(vehicles.Count);
 
             //todo: fixa krash då garaget är tomt
             return vehicles
@@ -121,19 +120,63 @@ namespace GarageApp
             {
                 var firstGarage = garages.FirstOrDefault(g => true);
                 if (firstGarage != null)
-                    garageId = firstGarage.id;
+                    garageId = firstGarage.Id;
                 else
                     error = true;
             }
             else
                 error = true;
 
-            if (!error) return;
+            if (error)
+            {
+                HandleDbMissing();
+            }
+            else
+            {
+                ResetGarageNextId();
+                ResetVehicleNextId();
+            }
+        }
 
-            const string msg = "Databasfilen kunde inte hittas.\nSkapar en ny åt dig (garages.json under din användarkatalog)..";
-            ConsoleHelper.Announce(msg);
-            FactoryEmptyGarage();
-            FileHandler.SaveAllGarages(this.garages);
+        private void HandleDbMissing()
+        {
+                const string msg = "Databasfilen kunde inte hittas.\nSkapar en ny åt dig (garages.json under din användarkatalog)..";
+                ConsoleHelper.Announce(msg);
+                FactoryEmptyGarage();
+                FileHandler.SaveAllGarages(this.garages);
+        }
+
+        private void ResetGarageNextId()
+        {
+            var newNextId = 0;
+
+            // Todo byt ut foreach till LINQ
+            // int newNextId = garages.MaxBy(x => x.Height);
+
+            foreach (var garage in garages)
+            {
+                if (garage.Id > newNextId)
+                    newNextId = garage.Id + 1;
+            }
+            Garage<Vehicle>.NextId = newNextId + 1;
+        }
+
+        private void ResetVehicleNextId()
+        {
+            var newNextId = 0;
+
+            // Todo byt ut foreach till LINQ
+            // int newNextId = vehicles.MaxBy(x => x.Height);
+
+            foreach (var garage in garages)
+            {
+                foreach (var vehicle in garage.Vehicles)
+                {
+                    if (vehicle.id > newNextId)
+                        newNextId = vehicle.id + 1;
+                }
+            }
+            Vehicle.NextId = newNextId;
         }
 
 
@@ -143,8 +186,8 @@ namespace GarageApp
 
             var garage = new Garage<Vehicle>("Factory Grand Garage")
             {
-                id = 10,
-                vehicles = new List<Vehicle> {
+                Id = 10,
+                Vehicles = new List<Vehicle> {
                     new Car("Ford Escort", "vit", "YEO403", 825),
                     new Car("Audi R8", "black", "SUP775", 790),
                     new Motorcycle("Honda", "red", "AY16", 150),
@@ -155,8 +198,8 @@ namespace GarageApp
 
             garage = new Garage<Vehicle>("Factory Deluxe Hangar")
             {
-                id = 11,
-                vehicles = new List<Vehicle> {
+                Id = 11,
+                Vehicles = new List<Vehicle> {
                     new Car("Ferarri Testarossa", "gul", "SKE001", 825),
                     new Car("Audi R8", "black", "KUP006", 790),
                     new Motorcycle("Honda", "red", "AY305", 150),
@@ -165,7 +208,7 @@ namespace GarageApp
                 }
             };
             garages.Add(garage);
-            garageId = garages.First().id;
+            garageId = garages.First().Id;
         }
 
 
@@ -176,7 +219,7 @@ namespace GarageApp
             var g1 = new Garage<Vehicle>("Testgaraget");
             // g1.vehicles = new List<Vehicle> { new Car(999, "Skrothög", "brun", "ZZZ001", 100) };
             garages.Add(g1);
-            garageId = g1.id;
+            garageId = g1.Id;
         }
 
     }
