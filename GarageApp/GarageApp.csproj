@@ -64,13 +64,14 @@
     <Compile Include="Boat.cs" />
     <Compile Include="Buss.cs" />
     <Compile Include="Car.cs" />
-    <Compile Include="Common.cs" />
+    <Compile Include="MenuBuilder.cs" />
     <Compile Include="ConsoleHelper.cs" />
     <Compile Include="FileHandler.cs" />
     <Compile Include="Garage.cs" />
     <Compile Include="GarageHandler.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuAction.cs" />
+    <Compile Include="MenuConverter.cs" />
     <Compile Include="MenuHandler.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="Motorcycle.cs" />

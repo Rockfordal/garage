@@ -39,17 +39,51 @@ namespace GarageApp
         /// <returns></returns>
         public static string AskQuestionText(string question)
         {
+            ClearLine();
             Console.Write(question + ": ");
             return Console.ReadLine();
         }
 
+        public static string AskQuestionText(string question, string untouched)
+        {
+            string newText = AskQuestionText(question);
+
+            if (newText.Count() > 0)
+                return newText;
+            else
+                return untouched;
+        }
+
         public static int AskQuestionInt(string question)
         {
+            ClearLine();
             int num;
             Console.Write(question + ": ");
             string s = Console.ReadLine();
             int.TryParse(s, out num);
             return num;
+        }
+
+
+        public static int AskQuestionInt(string question, int untouched)
+        {
+            ClearLine();
+            int num;
+            Console.Write(question + ": ");
+            string s = Console.ReadLine();
+            int.TryParse(s, out num);
+
+            if (s.Count() > 0)
+                return num;
+            else
+                return untouched;
+        }
+
+        private static void ClearLine()
+        {
+            int left = Console.CursorLeft;
+            Console.Write("                             ");
+            Console.CursorLeft = left;
         }
 
 
@@ -164,6 +198,27 @@ namespace GarageApp
             Console.WriteLine(num.ToString());
             Console.ForegroundColor = oldFg;
             ConsoleHelper.Pause();
+        }
+
+
+        internal static string SafeSub(string field, int num)
+        {
+            if (field != null)
+            {
+                int cap = field.Count();
+                int cut = Math.Min(cap, num);
+                return field.Substring(0, cut);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+
+        internal static string SafeSub(int field, int num)
+        {
+            return SafeSub(field.ToString(), num);
         }
 
     }

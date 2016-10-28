@@ -12,10 +12,12 @@ namespace GarageApp
         public string color      { get; set; }
         public int    weight     { get; set; }
 
+
         public string MyType
         {
             get { return ConsoleHelper.GetTypeOf(this); }
         }
+
 
         public Vehicle(int id, string name, string color, string regnr, int weight)
         {
@@ -26,31 +28,19 @@ namespace GarageApp
             this.weight = weight;
         }
 
+
+        public Vehicle()
+        {
+            this.name = "";
+        }
+
+
         public override string ToString()
         {
-            string colorF  = SafeSub(color, 7);
-            string nameF   = SafeSub(name, 20);
-            string weightF = SafeSub(weight, 4);
+            string colorF  = ConsoleHelper.SafeSub(color, 7);
+            string nameF   = ConsoleHelper.SafeSub(name, 20);
+            string weightF = ConsoleHelper.SafeSub(weight, 4);
             return String.Format("{0, 7} {1, 20} {2, 4}kg", colorF , nameF, weightF);
-        }
-
-        public static string SafeSub(string field, int num)
-        {
-            if (field != null)
-            {
-                int cap = field.Count();
-                int cut = Math.Min(cap, num);
-                return field.Substring(0, cut);
-            }
-            else
-            {
-                return "";
-            }
-        }
-
-        public static string SafeSub(int field, int num)
-        {
-            return SafeSub(field.ToString(), num);
         }
 
     }

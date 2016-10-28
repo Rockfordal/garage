@@ -20,9 +20,9 @@ namespace GarageApp
             {
                 switch (action.type)
                 {
-                    case MenuBuilder.ActionType.info:
-                        VehicleUI.ShowVehicleInfo(lastSelectedVehicle, gh);
-                        break;
+                    //case MenuBuilder.ActionType.info:
+                    //    VehicleUI.ShowVehicleInfo(lastSelectedVehicle, gh);
+                    //    break;
 
                     case MenuBuilder.ActionType.edit:
                         VehicleUI.EditVehicle(lastSelectedVehicle, gh, mh);
@@ -82,7 +82,16 @@ namespace GarageApp
                                     mh.current.Push("vehicleIndex");
                                 }
                                 else if (mh.currentMenu.name == "vehicleIndex")
+                                {
                                     lastSelectedVehicle = action.id;
+                                    //ConsoleHelper.Announce("vInd");
+                                    MenuBuilder.AddVehiclesToOptionsMenu(gh, mh, lastSelectedVehicle);
+                                }
+                                //else if (mh.currentMenu.name == "vehicleOptions")
+                                //{
+                                //    ConsoleHelper.Announce("vOpt");
+                                //    //MenuBuilder.AddVehiclesToOptionsMenu(gh, mh);
+                                //}
                                 break;
                         }
                         mh.TryGotoMenu(action.data);

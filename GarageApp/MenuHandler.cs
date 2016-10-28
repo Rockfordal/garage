@@ -31,6 +31,7 @@ namespace GarageApp
         {
             current = new Stack<string>();
             menus = new SortedDictionary<string, Menu>();
+            settings = new MenuSettings();
         }
 
         public void GoBack()

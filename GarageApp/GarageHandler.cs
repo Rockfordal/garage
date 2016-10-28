@@ -36,10 +36,15 @@ namespace GarageApp
             {
                 var currentGarage = GetCurrentGarage();
                 var index = garages.IndexOf(currentGarage);
-                garages[index].vehicles = (List<Vehicle>)
-                    GetCurrentGarage().vehicles
-                        .Where(v => v.id != id)
-                        .Select(b => b);
+                if (index != -1)
+                {
+                    Garage<Vehicle> foundG = garages[index];
+                    IEnumerable<Vehicle> newVehicles = GetCurrentGarage().vehicles
+                            .Where(v => v.id != id)
+                            .Select(b => b);
+
+                    foundG.vehicles = newVehicles.ToList<Vehicle>();
+                }
             }
             return vehicle;
         }
