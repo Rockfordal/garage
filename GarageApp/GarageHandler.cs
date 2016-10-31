@@ -18,7 +18,20 @@ namespace GarageApp
             LoadFromDb();
         }
 
-        internal object TryGetVehicle(int id)
+        public List<Vehicle> AllVehicles
+        {
+            get
+            {
+                List<Vehicle> allVehicles = new List<Vehicle>();
+                foreach (Garage<Vehicle> garage in garages)
+                {
+                    allVehicles.AddRange(garage.Vehicles);
+                }
+                return allVehicles;
+            }
+        }
+
+        internal Vehicle TryGetVehicle(int id)
         {
             Vehicle found = null;
             IEnumerable<Vehicle> vehiclesFound = GetCurrentGarage().Vehicles
@@ -103,14 +116,30 @@ namespace GarageApp
                                                          StringComparison.CurrentCultureIgnoreCase));
         }
 
+
         internal IEnumerable<Vehicle> FindVehicles(string searchString)
         {
-            var garage    = GetCurrentGarage();
-            var vehicles  = garage.Vehicles;
+            var vehicles  = AllVehicles;
             var lowSearch = searchString.ToLower();
 
             if (!vehicles.Any()) return null;
 
+            var safeVehicles = MakeSafe(vehicles);
+
+            return safeVehicles.Where(v =>
+                (string.IsNullOrEmpty(searchString)
+                || (v.name.ToLower().Contains(lowSearch)
+                ||  v.regnr.ToLower().Contains(lowSearch)
+                ||  v.weight.ToString() == lowSearch
+                ||  v.color.ToLower() == lowSearch
+                || v.MyType.ToLower() == lowSearch
+                   )
+            ));
+        }
+
+
+        public List<Vehicle> MakeSafe(IEnumerable<Vehicle> vehicles)
+        {
             List<Vehicle> safeVehicles = new List<Vehicle>();
 
             foreach (var vehicle in vehicles)
@@ -120,17 +149,12 @@ namespace GarageApp
                 if (vehicle.regnr == null)
                     tempVehicle.regnr = "";
 
+                if (vehicle.color == null)
+                    tempVehicle.color = "";
+
                 safeVehicles.Add(tempVehicle);
             }
-
-            return safeVehicles.Where(v =>
-                (string.IsNullOrEmpty(searchString)
-                || (v.name.ToLower().Contains(lowSearch)
-                 || v.regnr.ToLower().Contains(lowSearch)
-                 || v.weight.ToString().ToLower().Contains(lowSearch)
-                 || v.color.ToLower().Contains(lowSearch)
-                )
-            ));
+            return  safeVehicles;
         }
 
 

@@ -33,7 +33,7 @@ namespace GarageApp
                         new MenuItem(garageLabel,              new MenuAction(Route, "garageIndex")),
                         new MenuItem("Grupper",                new MenuAction(Route, "allGroupIndex")),
                         // new MenuItem("Lista alla fordon (todo)",  new MenuAction(route, "vehicleIndex")),
-                        new MenuItem("Sök på Regnr",           new MenuAction(Search, "regnr")),
+                        new MenuItem("Sök fordon",              new MenuAction(Search, "regnr")),
                         new MenuItem("Databas",                new MenuAction(Route, "fileOptions")),
                         new MenuItem("Avsluta utan att spara", new MenuAction(Quit)) }));
 
