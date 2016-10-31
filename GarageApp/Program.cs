@@ -63,7 +63,7 @@ namespace GarageApp
 
                     case MenuBuilder.ActionType.Search:
                         if (action.data == "regnr")
-                            VehicleUI.SearchByRegnr(gh, mh);
+                            VehicleUI.Search(gh, mh);
                         break;
 
                     case MenuBuilder.ActionType.Route:

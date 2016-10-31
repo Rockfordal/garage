@@ -21,7 +21,6 @@ namespace GarageApp
         internal static MenuItem VehicleToMenuItem(Vehicle vehicle)
         {
             return new MenuItem(vehicle.ToString(),
-                    //new MenuAction(MenuBuilder.ActionType.Route, "vehicleOptions"), vehicle.id);
                     new MenuAction(MenuBuilder.ActionType.Edit, "vehicle"), vehicle.id);
         }
 

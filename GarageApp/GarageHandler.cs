@@ -98,9 +98,39 @@ namespace GarageApp
 
             //todo: fixa krash då garaget är tomt
             return vehicles
-                    .FirstOrDefault(v => string.Equals(v.regnr.ToLower(),
-                                                         regnr.ToLower(),
-                                                         StringComparison.Ordinal));
+                    .FirstOrDefault(v => string.Equals(v.regnr,
+                                                         regnr,
+                                                         StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        internal IEnumerable<Vehicle> FindVehicles(string searchString)
+        {
+            var garage    = GetCurrentGarage();
+            var vehicles  = garage.Vehicles;
+            var lowSearch = searchString.ToLower();
+
+            if (!vehicles.Any()) return null;
+
+            List<Vehicle> safeVehicles = new List<Vehicle>();
+
+            foreach (var vehicle in vehicles)
+            {
+                var tempVehicle = vehicle;
+
+                if (vehicle.regnr == null)
+                    tempVehicle.regnr = "";
+
+                safeVehicles.Add(tempVehicle);
+            }
+
+            return safeVehicles.Where(v =>
+                (string.IsNullOrEmpty(searchString)
+                || (v.name.ToLower().Contains(lowSearch)
+                 || v.regnr.ToLower().Contains(lowSearch)
+                 || v.weight.ToString().ToLower().Contains(lowSearch)
+                 || v.color.ToLower().Contains(lowSearch)
+                )
+            ));
         }
 
 

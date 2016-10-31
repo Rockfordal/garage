@@ -159,22 +159,43 @@ namespace GarageApp
 
             gh.AddVehicle(vehicle);
 
-            //MenuBuilder.UpdateGarageMenu(gh, mh);
-            //MenuBuilder.UpdateGroupMenu(gh, mh);
+            // MenuBuilder.UpdateGarageMenu(gh, mh);
+            // MenuBuilder.UpdateGroupMenu(gh, mh);
             MenuBuilder.UpdateAllMenus(gh, mh);
 
             return vehicle.id;
         }
 
 
-        internal static void SearchByRegnr(GarageHandler gh, MenuHandler mh)
+        //internal static void SearchByRegnr(GarageHandler gh, MenuHandler mh)
+        //{
+        //    ConsoleHelper.PutLabel("Registernummersökning");
+        //    var regnr = ConsoleHelper.AskQuestionText("Ange regnr");
+        //    Vehicle found = gh.FindVehicleByRegnr(regnr);
+
+        //    if (found != null)
+        //    {
+        //        ConsoleHelper.Pause();
+        //        //mh.TryGotoMenu("vehicle");
+        //    }
+        //    else
+        //        ConsoleHelper.Announce("Ursäkta, fordonet kunde tyvärr inte hittas.");
+        //}
+
+
+        internal static void Search(GarageHandler gh, MenuHandler mh)
         {
-            ConsoleHelper.PutLabel("Registernummersökning");
-            var regnr = ConsoleHelper.AskQuestionText("Ange regnr");
-            Vehicle found = gh.FindVehicleByRegnr(regnr);
-            if (found != null)
+            ConsoleHelper.PutLabel("Sökning");
+            var text = ConsoleHelper.AskQuestionText("sökterm");
+            IEnumerable<Vehicle> found = gh.FindVehicles(text);
+            if (found.Any())
             {
-                mh.current.Push("vehicleOptions");
+                Console.Clear();
+                foreach (var vehicle in found)
+                {
+                    Console.WriteLine(vehicle);
+                }
+                ConsoleHelper.AnyKey();
             }
             else
                 ConsoleHelper.Announce("Ursäkta, fordonet kunde tyvärr inte hittas.");
