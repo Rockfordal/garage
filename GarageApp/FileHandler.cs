@@ -21,7 +21,11 @@ namespace GarageApp
 
         public static void SaveAllGarages(IEnumerable<Garage<Vehicle>> data)
         {
-            string json = JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
+            string json = JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            });
+
             File.WriteAllText(getPath(fileName), json);
         }
 
@@ -30,11 +34,14 @@ namespace GarageApp
             try
             {
                 string jsonData = File.ReadAllText(getPath(fileName));
-                gh.garages = JsonConvert.DeserializeObject<List<Garage<Vehicle>>>(jsonData);
+                gh.garages = JsonConvert.DeserializeObject<List<Garage<Vehicle>>>(jsonData, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                });
             }
             catch (FileNotFoundException)
             {
-                //SaveAllGarages(gh.garages);
+                // Vi hanterar om antal garage är 0 i garagehandler LoadFromDb
             }
             return gh.garages.Count;
         }
