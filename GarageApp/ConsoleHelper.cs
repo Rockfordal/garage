@@ -28,12 +28,15 @@ namespace GarageApp
 
             if (menu.MenuItems.Any())
             {
+            //    if (menu.MenuItems.FirstOrDefault().)
+
                 Console.CursorTop = lowest + menu.lastIndex;
                 WriteActiveMenuItem(menu, index); // Aktivera första valet
             }
 
             do
             {
+                Console.CursorVisible = false;
                 ki = Console.ReadKey(true);
                 key = ki.Key;
 
@@ -66,6 +69,7 @@ namespace GarageApp
 
             menu.lastIndex = index;
 
+            Console.CursorVisible = true;
             return new MenuAction(back, "");
         }
 
@@ -116,6 +120,37 @@ namespace GarageApp
             else
                 return untouched;
         }
+   
+
+        public static string EditQuestionText(string question, string old)
+        {
+            ClearLine();
+            Console.Write(question + ": ");
+            System.Windows.Forms.SendKeys.SendWait(old); 
+
+            Console.CursorVisible = true;
+            string newText = Console.ReadLine();
+
+            if (newText.Any())
+                return newText;
+            else
+                return old;
+        }
+
+
+        public static int EditQuestionInt(string question, int old)
+        {
+            ClearLine();
+            int num;
+            Console.Write(question + ": ");
+            Console.CursorVisible = true;
+            System.Windows.Forms.SendKeys.SendWait(old.ToString()); 
+
+            string s = Console.ReadLine();
+            int.TryParse(s, out num);
+            return num;
+        }
+
 
         public static int AskQuestionInt(string question)
         {

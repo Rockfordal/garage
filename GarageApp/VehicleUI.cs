@@ -20,6 +20,7 @@ namespace GarageApp
             };
 
             var action = new MenuAction(); // skrivs över
+            int index = 0;
 
             do
             {
@@ -33,24 +34,22 @@ namespace GarageApp
                         new MenuItem("Ta bort!",  new MenuAction(Noop, "deleteVehicle"))
                     });
 
+                editMenu.lastIndex = index;
+
                 action = ConsoleHelper.RenderMenu(editMenu);
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                int pos = Console.CursorTop;
-                // Console.SetCursorPosition(0, pos - 1);
+
+                //index = Console.CursorTop;
 
                 switch (action.data)
                 {
-                    case "deleteVehicle":
-                        gh.TryDeleteVehicle(vehicle.id);
-                        MenuBuilder.UpdateAllMenus(gh, mh);
-                        return;
-
                     case "namn":
                         Console.SetCursorPosition(0, 3);
                         Console.WriteLine("Ändra namn");
                         Console.ForegroundColor = mh.settings.ActiveColor;
-                        vehicle.name = ConsoleHelper.AskQuestionText("Namn", vehicle.name);
+                        vehicle.name = ConsoleHelper.EditQuestionText("Namn", vehicle.name);
+                        index = 0;
                         break;
 
                     case "color":
@@ -58,7 +57,8 @@ namespace GarageApp
                         Console.WriteLine("Ändra färg");
                         Console.SetCursorPosition(0, 5);
                         Console.ForegroundColor = mh.settings.ActiveColor;
-                        vehicle.color = ConsoleHelper.AskQuestionText("Färg", vehicle.color);
+                        vehicle.color = ConsoleHelper.EditQuestionText("Färg", vehicle.color);
+                        index = 1;
                         break;
 
                     case "weight":
@@ -66,7 +66,8 @@ namespace GarageApp
                         Console.WriteLine("Ändra vikt");
                         Console.SetCursorPosition(0, 6);
                         Console.ForegroundColor = mh.settings.ActiveColor;
-                        vehicle.weight = ConsoleHelper.AskQuestionInt("Vikt", vehicle.weight);
+                        vehicle.weight = ConsoleHelper.EditQuestionInt("Vikt", vehicle.weight);
+                        index = 2;
                         break;
 
                     case "regnr":
@@ -74,9 +75,14 @@ namespace GarageApp
                         Console.WriteLine("Ändra regnr");
                         Console.SetCursorPosition(0, 7);
                         Console.ForegroundColor = mh.settings.ActiveColor;
-                        vehicle.regnr = ConsoleHelper.AskQuestionText("Regnr", vehicle.regnr);
+                        vehicle.regnr = ConsoleHelper.EditQuestionText("Regnr", vehicle.regnr);
+                        index = 3;
                         break;
 
+                    case "deleteVehicle":
+                        gh.TryDeleteVehicle(vehicle.id);
+                        MenuBuilder.UpdateAllMenus(gh, mh);
+                        return;
                 }
                 Console.ForegroundColor = mh.settings.PassiveColor;
                 // ConsoleHelper.Announce("type(" + action.type + ") (" + action.data + ") "+ action.id);

@@ -15,7 +15,6 @@ namespace GarageApp
         private const ActionType Search = ActionType.Search;
 
 
-
         internal static void UpdateAllMenus(GarageHandler gh, MenuHandler mh)
         {
             MenuBuilder.UpdateMainMenu(gh, mh);
@@ -64,9 +63,9 @@ namespace GarageApp
             mh.AddMenu(new Menu("garageIndex", "Välj garage", items));
 
             var labelRow = Garage<Vehicle>.ToHeader();
-            items.Insert(0, new MenuItem(labelRow));
+            items.Insert(0, new MenuItem(labelRow, false));
 
-            items.Add(new MenuItem(""));
+            items.Add(new MenuItem("", true));
             items.Add(new MenuItem("Nytt garage", new MenuAction(Create, "garage")));
         }
 

@@ -94,14 +94,7 @@ namespace GarageApp
 
                             case "groupedVehicleIndex":
                                 MenuBuilder.UpdateGroupResult(gh, mh, action.extra);
-                                //mh.current.Pop();
-                                //mh.current.Push("groupedVehicleIndex");
                                 break;
-
-                            //case "allaGarage":
-                            //    MenuBuilder.UpdateAllMenus(gh, mh);
-                            //    mh.current.Pop();
-                            //    break;
 
                             default:  // Om man valt att gå in i en meny?
                                 switch (mh.currentMenu.Name)
