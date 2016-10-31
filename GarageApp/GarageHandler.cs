@@ -34,7 +34,8 @@ namespace GarageApp
         internal Vehicle TryGetVehicle(int id)
         {
             Vehicle found = null;
-            IEnumerable<Vehicle> vehiclesFound = GetCurrentGarage().Vehicles
+            //IEnumerable<Vehicle> vehiclesFound = GetCurrentGarage().Vehicles
+            IEnumerable<Vehicle> vehiclesFound = AllVehicles
                 .Where(v => v.id == id)
                 .Select(b => b);
             if (vehiclesFound.Any())

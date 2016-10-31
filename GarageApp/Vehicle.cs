@@ -21,10 +21,10 @@ namespace GarageApp
 
         public Vehicle(string name, string color, string regnr, int weight)
         {
-            this.id = NextId++;
+            this.id     = NextId++;
             this.name   = name;
             this.color  = color;
-            this.regnr  = regnr;
+            this.regnr  = regnr.ToUpper();
             this.weight = weight;
         }
 
