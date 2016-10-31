@@ -23,24 +23,14 @@ namespace GarageApp
             ConsoleKeyInfo ki;
             ConsoleKey key;
 
-            int index;
+            int index = menu.lastIndex;
             int indexMax = menu.MenuItems.Count() - 1;
 
-
-            if (menu.lastIndex != null)
-            {
-                index = menu.lastIndex;
-                Console.CursorTop = lowest + menu.lastIndex;
-            }
-            else
-            {
-                index = 0;
-                Console.CursorTop = lowest;
-            }
-
             if (menu.MenuItems.Any())
+            {
+                Console.CursorTop = lowest + menu.lastIndex;
                 WriteActiveMenuItem(menu, index); // Aktivera första valet
-
+            }
 
             do
             {
@@ -68,6 +58,7 @@ namespace GarageApp
                     var item = menu.MenuItems.ElementAt(index);
                     var action = item.action;
                     action.id = item.id;
+                    menu.lastIndex = index;
                     return action;
                 }
 

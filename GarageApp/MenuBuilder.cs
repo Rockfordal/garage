@@ -7,12 +7,13 @@ namespace GarageApp
     {
         public enum ActionType { Noop, Enter, Back, Quit, Route, Edit, Delete, Create, Search }
 
-        private const ActionType Route = ActionType.Route;
+        private const ActionType Route  = ActionType.Route;
         private const ActionType Quit   = ActionType.Quit;
         private const ActionType Edit   = ActionType.Edit;
         private const ActionType Delete = ActionType.Delete;
         private const ActionType Create = ActionType.Create;
         private const ActionType Search = ActionType.Search;
+
 
 
         internal static void UpdateAllMenus(GarageHandler gh, MenuHandler mh)
@@ -99,5 +100,17 @@ namespace GarageApp
             mh.AddMenu(new Menu("vehicleIndex", garageName + " -> Välj fordon", items));
         }
 
+
+        internal static void UpdateGroupResult(GarageHandler gh, MenuHandler mh, string typ)
+        {
+            mh.menus.Remove("groupedVehicleIndex");
+
+            var vehicles = gh.AllVehiclesByType(typ);
+
+            var items = new List<MenuItem>();
+            items = (List<MenuItem>) MenuConverter.VehiclesToMenuItems(vehicles);
+
+            mh.AddMenu(new Menu("groupedVehicleIndex", "Fordon inom grupp", items));
+        }
     }
 }

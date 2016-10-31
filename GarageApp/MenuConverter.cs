@@ -6,6 +6,8 @@ namespace GarageApp
 {
     class MenuConverter
     {
+        private const MenuBuilder.ActionType Route = MenuBuilder.ActionType.Route;
+        private const MenuBuilder.ActionType Edit  = MenuBuilder.ActionType.Edit;
 
         internal static IEnumerable<MenuItem> VehiclesToMenuItems(IEnumerable<Vehicle> vehicles)
         {
@@ -21,7 +23,7 @@ namespace GarageApp
         internal static MenuItem VehicleToMenuItem(Vehicle vehicle)
         {
             return new MenuItem(vehicle.ToString(),
-                    new MenuAction(MenuBuilder.ActionType.Edit, "vehicle"), vehicle.id);
+                    new MenuAction(Edit, "vehicle"), vehicle.id);
         }
 
 
@@ -44,7 +46,7 @@ namespace GarageApp
 
         internal static MenuItem FieldToMenuItem(string field)
         {
-            return new MenuItem(field, new MenuAction(MenuBuilder.ActionType.Route, "fieldEdit"));
+            return new MenuItem(field, new MenuAction(Route, "fieldEdit"));
         }
 
 
@@ -62,7 +64,7 @@ namespace GarageApp
 
         internal static MenuItem GarageToMenuItem(Garage<Vehicle> garage)
         {
-            return new MenuItem(garage.ToString(), new MenuAction(MenuBuilder.ActionType.Route, "garageOptions"), garage.Id);
+            return new MenuItem(garage.ToString(), new MenuAction(Route, "garageOptions"), garage.Id);
         }
 
 
@@ -70,8 +72,6 @@ namespace GarageApp
         {
             List<MenuItem> menuItems = new List<MenuItem>();
             var enumerable = vehicles as IList<Vehicle> ?? vehicles.ToList();
-            //Vehicle found = enumerable.FirstOrDefault();
-            //string typ = ConsoleHelper.GetTypeOf(found);
             IEnumerable<IGrouping<string, Vehicle>> query = enumerable.GroupBy(ConsoleHelper.GetTypeOf);
 
             foreach (var entry in query)
@@ -91,7 +91,7 @@ namespace GarageApp
             string name = entry.Key;
             int count = entry.ToList().Count;
             string label = string.Format("{0,10} ({1})", name, count);
-            return new MenuItem(label, new MenuAction(MenuBuilder.ActionType.Route, "groupOptions"));
+            return new MenuItem(label, new MenuAction(Route, "groupedVehicleIndex", name));
         }
     }
 }

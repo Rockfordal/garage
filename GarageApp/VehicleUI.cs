@@ -7,7 +7,6 @@ namespace GarageApp
     class VehicleUI
     {
         private static MenuBuilder.ActionType Noop   = MenuBuilder.ActionType.Noop;
-        private static MenuBuilder.ActionType Delete = MenuBuilder.ActionType.Delete;
 
         // Todo: Ej klar! (det ska bli direkt-redigering i fordonsmenyn)
         internal static void EditVehicle(int id, GarageHandler gh, MenuHandler mh)

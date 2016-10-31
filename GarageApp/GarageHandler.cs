@@ -24,18 +24,20 @@ namespace GarageApp
             {
                 List<Vehicle> allVehicles = new List<Vehicle>();
                 foreach (Garage<Vehicle> garage in garages)
-                {
                     allVehicles.AddRange(garage.Vehicles);
-                }
                 return allVehicles;
             }
         }
 
-        internal Vehicle TryGetVehicle(int id)
+        public IEnumerable<Vehicle> AllVehiclesByType(string type)
+        {
+            return AllVehicles.Where(v => v.MyType == type);
+        }
+
+        public Vehicle TryGetVehicle(int id)
         {
             Vehicle found = null;
-            //IEnumerable<Vehicle> vehiclesFound = GetCurrentGarage().Vehicles
-            IEnumerable<Vehicle> vehiclesFound = AllVehicles
+            IEnumerable<Vehicle> vehiclesFound = AllVehicles // alt: GetCurrentGarage().Vehicles
                 .Where(v => v.id == id)
                 .Select(b => b);
             if (vehiclesFound.Any())

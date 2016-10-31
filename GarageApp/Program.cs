@@ -92,11 +92,16 @@ namespace GarageApp
                                 mh.current.Pop();
                                 break;
 
+                            case "groupedVehicleIndex":
+                                MenuBuilder.UpdateGroupResult(gh, mh, action.extra);
+                                //mh.current.Pop();
+                                //mh.current.Push("groupedVehicleIndex");
+                                break;
+
                             //case "allaGarage":
                             //    MenuBuilder.UpdateAllMenus(gh, mh);
                             //    mh.current.Pop();
                             //    break;
-
 
                             default:  // Om man valt att gå in i en meny?
                                 switch (mh.currentMenu.Name)
@@ -107,11 +112,6 @@ namespace GarageApp
                                         // mh.current.Pop(); // Glöm garagemenyn (hoppa direkt till huvudmenyn på tillbakavägen)
                                         mh.current.Push("vehicleIndex");
                                         break;
-                                    //case "vehicleIndex":
-                                    //    lastSelectedVehicle = action.id;
-                                        // Vi hoppar direkt till redigera nu, så tror inte denna behövs:
-                                        //MenuBuilder.AddVehiclesToOptionsMenu(gh, mh, lastSelectedVehicle);
-                                        //break;
                                 }
                             break;
                         }
